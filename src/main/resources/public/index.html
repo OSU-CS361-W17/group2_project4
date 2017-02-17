@@ -436,7 +436,6 @@ h1 {
 <script>
    $('#TheirBoard td').click(function(event) {
    console.log("CLICK EVENT");
-
    $.ajax("/fire", {
       success: function(data) {
          <!--$('#main').html($(data).find('#main *'));-->
