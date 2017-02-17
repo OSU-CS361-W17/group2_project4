@@ -8,6 +8,11 @@ body {
 /*with:100px;
 height:100px;*/
 background-color: light-gray;
+margin:20px;
+}
+
+.gameBoard table{
+    margin: 0 auto;
 }
 
 .gameBoard td {
@@ -15,6 +20,7 @@ width: 40px;
 height:40px;
 background-color:blue;
 }
+
 
 table, th, td {
    border: 1px solid black;
@@ -24,6 +30,14 @@ table, th, td {
 background-color: orange;
 }
 
+td.BoardHeader, .BoardHeader td{
+    background-color: white;
+    text-align:center;
+}
+
+.ControlsPanel{
+    margin:20px;
+}
 /*
 button {
     margin: 0;
