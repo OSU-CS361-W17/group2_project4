@@ -55,7 +55,12 @@ function placeShip() {
      }
    }
 
-   if((row_start > gameModel.aircraftCarrier.end.Across || row_end < gameModel.aircraftCarrier.start.Across || col_start > gameModel.aircraftCarrier.end.Down || col_end < gameModel.aircraftCarrier.start.Down) && (row_start > gameModel.battleship.end.Across || row_end < gameModel.battleship.start.Across || col_start > gameModel.battleship.end.Down || col_end < gameModel.battleship.start.Down) && (row_start > gameModel.cruiser.end.Across || row_end < gameModel.cruiser.start.Across || col_start > gameModel.cruiser.end.Down || col_end < gameModel.cruiser.start.Down) && (row_start > gameModel.destroyer.end.Across || row_end < gameModel.destroyer.start.Across || col_start > gameModel.destroyer.end.Down || col_end < gameModel.destroyer.start.Down) && (row_start > gameModel.submarine.end.Across || row_end < gameModel.submarine.start.Across || col_start > gameModel.submarine.end.Down || col_end < gameModel.submarine.start.Down) && row_end <= 10 && col_end >= 10) {
+   if((row_start > gameModel.aircraftCarrier.end.Across || row_end < gameModel.aircraftCarrier.start.Across || col_start > gameModel.aircraftCarrier.end.Down || col_end < gameModel.aircraftCarrier.start.Down) &&
+      (row_start > gameModel.battleship.end.Across || row_end < gameModel.battleship.start.Across || col_start > gameModel.battleship.end.Down || col_end < gameModel.battleship.start.Down) &&
+      (row_start > gameModel.cruiser.end.Across || row_end < gameModel.cruiser.start.Across || col_start > gameModel.cruiser.end.Down || col_end < gameModel.cruiser.start.Down) &&
+      (row_start > gameModel.destroyer.end.Across || row_end < gameModel.destroyer.start.Across || col_start > gameModel.destroyer.end.Down || col_end < gameModel.destroyer.start.Down) &&
+      (row_start > gameModel.submarine.end.Across || row_end < gameModel.submarine.start.Across || col_start > gameModel.submarine.end.Down || col_end < gameModel.submarine.start.Down) &&
+      row_end <= 10 && col_end >= 10) {
      var request = $.ajax({
        url: "/placeShip/"+$( "#shipSelec" ).val()+"/"+$( "#rowSelec" ).val()+"/"+$( "#colSelec" ).val()+"/"+$( "#orientationSelec" ).val(),
        method: "post",
