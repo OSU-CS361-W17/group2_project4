@@ -1,4 +1,5 @@
 var gameModel;
+var DevToolsEnabled = false;
 
 $( document ).ready(function() {
   // Handler for .ready() called.
@@ -6,7 +7,66 @@ $( document ).ready(function() {
   gameModel = json;
     console.log( "JSON Data: " + json );
    });
+
 });
+
+function GameState_START(IsDonePlacingShip)
+{
+    if(IsDonePlacingShip == false){
+        $("#EnemyPanel").addClass("hidden");
+        $("#PlaceShipControl").removeClass("hidden");
+    }
+    else{
+        $("#EnemyPanel").removeClass("hidden");
+        $("#PlaceShipControl").addClass("hidden");
+    }
+}
+function CheckAllPlayerShipsPlaced()
+{
+    IsAllPlaced = false;
+
+    //aircraftCarrier
+    /*if(gameModel.aircraftCarrier.end.Down != 0 ||gameModel.aircraftCarrier.end.Across != 0){
+        IsAllPlaced = true;
+    }
+    else{
+        IsAllPlaced = false
+    }*/
+
+    //battleship
+    if(gameModel.battleship.end.Down != 0 ||gameModel.battleship.end.Across != 0){
+        IsAllPlaced = true;
+    }
+    else{
+        IsAllPlaced = false
+    }
+
+    //cruiser
+    if(gameModel.cruiser.end.Down != 0 ||gameModel.cruiser.end.Across != 0){
+        IsAllPlaced = true;
+    }
+    else{
+        IsAllPlaced = false
+    }
+
+    //destroyer
+    if(gameModel.destroyer.end.Down != 0 ||gameModel.destroyer.end.Across != 0){
+        IsAllPlaced = true;
+    }
+    else{
+        IsAllPlaced = false
+    }
+
+    //submarine
+    if(gameModel.submarine.end.Down != 0 ||gameModel.submarine.end.Across != 0){
+        IsAllPlaced = true;
+    }
+    else{
+        IsAllPlaced = false
+    }
+
+    return IsAllPlaced;
+}
 
 function placeShip() {
    console.log($( "#shipSelec" ).val());
@@ -26,7 +86,7 @@ function placeShip() {
    request.done(function( currModel ) {
      displayGameState(currModel);
      gameModel = currModel;
-
+     GameState_START(CheckAllPlayerShipsPlaced());
    });
 
    request.fail(function( jqXHR, textStatus ) {
@@ -150,7 +210,4 @@ function displayShip(ship){
         }
     }
  }
-
-
-
 }

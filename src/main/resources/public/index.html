@@ -8,9 +8,6 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 
 </head>
-<script src="/js/vendor/jquery-1.12.4.min.js"></script>
-<script src="/js/app.js"></script>
-<script src="/js/vendor/bootstrap.js"></script>
 
 <style>
 @font-family {
@@ -184,7 +181,7 @@ h1 {
                 </tbody>
             </table>
         </div>
-            <div class="ControlsPanel">
+            <div id="PlaceShipControl" class="ControlsPanel">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h1>Place Ships</h1>
@@ -235,7 +232,7 @@ h1 {
             </div>
         </div>
 
-        <div class="col-lg-6 panel panel-default">
+        <div id="EnemyPanel" class="col-lg-6 panel panel-default hidden">
             <div class="text-center">
                 <H1>Theirs</H1>
             </div>
@@ -433,6 +430,9 @@ h1 {
 
 
 </body>
+<script src="/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="/js/vendor/bootstrap.js"></script>
+<script src="/js/app.js"></script>
 <script>
    $('#TheirBoard td').click(function(event) {
    console.log("CLICK EVENT");
