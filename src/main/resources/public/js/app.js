@@ -137,6 +137,12 @@ function scan(){
      displayGameState(currModel);
      gameModel = currModel;
 
+     if(gameModel.scanResult){
+        alert("Scan found at least one Ship")}
+     else{
+        alert("Scan found no Ships")
+     }
+
    });
 
    request.fail(function( jqXHR, textStatus ) {
@@ -151,12 +157,6 @@ function log(logContents){
 }
 
 function displayGameState(gameModel){
-
-
-if(gameModel.scanResult){
-alert("Scan found at least one Ship")}
-else{
-alert("Scan found no Ships")}
 
 displayShip(gameModel.aircraftCarrier);
 displayShip(gameModel.battleship);
