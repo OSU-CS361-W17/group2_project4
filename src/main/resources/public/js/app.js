@@ -67,7 +67,7 @@ function CheckAllPlayerShipsPlaced()
 
     return IsAllPlaced;
 }
-
+/*
 function placeShip() {
    console.log($( "#shipSelec" ).val());
    console.log($( "#rowSelec" ).val());
@@ -92,6 +92,85 @@ function placeShip() {
    request.fail(function( jqXHR, textStatus ) {
      alert( "Request failed: " + textStatus );
    });
+}
+*/
+
+function placeShip() {
+   console.log($( "#shipSelec" ).val());
+   console.log($( "#rowSelec" ).val());
+   console.log($( "#colSelec" ).val());
+   console.log($( "#orientationSelec" ).val());
+
+   var row_start = parseInt($("#rowSelec").val());
+   var col_start = parseInt($("#colSelec").val());
+   var row_end = row_start;
+   var col_end = col_start;
+
+  console.log($("#orientationSelec").val().toUpperCase());
+  console.log($("#shipSelec").val().toUpperCase());
+   if($("#orientationSelec").val().toUpperCase() === "HORIZONTAL") {
+     if($("#shipSelec").val().toUpperCase() === "AIRCRAFTCARRIER") {
+       col_end = col_start + 5;
+     }
+     else if($("#shipSelec").val().toUpperCase() === "BATTLESHIP") {
+       col_end = col_start + 4;
+     }
+     else if($("#shipSelec").val().toUpperCase() === "CRUISER") {
+       col_end = col_start + 3;
+     }
+     else if($("#shipSelec").val().toUpperCase() === "DEESTROYER") {
+       col_end = col_start + 2;
+     }
+     else {
+       col_end = col_start + 2;
+     }
+   }
+
+   else {
+     if($("#shipSelec").val().toUpperCase() === "AIRCRAFTCARRIER") {
+       row_end = row_start + 5;
+     }
+     else if($("#shipSelec").val().toUpperCase() === "BATTLESHIP") {
+       row_end = row_start + 4;
+     }
+     else if($("#shipSelec").val().toUpperCase() === "CRUISER") {
+       row_end = row_start + 3;
+     }
+     else if($("#shipSelec").val().toUpperCase() === "DEESTROYER") {
+       row_end = row_start + 2;
+     }
+     else {
+       row_end = row_start + 2;
+     }
+   }
+
+    console.log(row_start);
+    console.log(col_start);
+    console.log(row_end);
+    console.log(col_end);
+
+   if((row_start > gameModel.aircraftCarrier.end.Across || row_end < gameModel.aircraftCarrier.start.Across || col_start > gameModel.aircraftCarrier.end.Down || col_end < gameModel.aircraftCarrier.start.Down) && (row_start > gameModel.battleship.end.Across || row_end < gameModel.battleship.start.Across || col_start > gameModel.battleship.end.Down || col_end < gameModel.battleship.start.Down) && (row_start > gameModel.cruiser.end.Across || row_end < gameModel.cruiser.start.Across || col_start > gameModel.cruiser.end.Down || col_end < gameModel.cruiser.start.Down) && (row_start > gameModel.destroyer.end.Across || row_end < gameModel.destroyer.start.Across || col_start > gameModel.destroyer.end.Down || col_end < gameModel.destroyer.start.Down) && (row_start > gameModel.submarine.end.Across || row_end < gameModel.submarine.start.Across || col_start > gameModel.submarine.end.Down || col_end < gameModel.submarine.start.Down) && row_end <= 10 && col_end <= 10) {
+     var request = $.ajax({
+       url: "/placeShip/"+$( "#shipSelec" ).val()+"/"+$( "#rowSelec" ).val()+"/"+$( "#colSelec" ).val()+"/"+$( "#orientationSelec" ).val(),
+       method: "post",
+       data: JSON.stringify(gameModel),
+       contentType: "application/json; charset=utf-8",
+       dataType: "json"
+     });
+
+     request.done(function( currModel ) {
+       displayGameState(currModel);
+       gameModel = currModel;
+     });
+
+     request.fail(function( jqXHR, textStatus ) {
+       alert( "Request failed: " + textStatus );
+     });
+   }
+
+   else {
+     alert("Error: Invalid Ship Placement.");
+   }
 }
 
 
