@@ -161,6 +161,7 @@ function placeShip() {
      request.done(function( currModel ) {
        displayGameState(currModel);
        gameModel = currModel;
+       GameState_START(CheckAllPlayerShipsPlaced());
      });
 
      request.fail(function( jqXHR, textStatus ) {
