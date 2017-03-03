@@ -94,19 +94,19 @@ function placeShip() {
   console.log($("#shipSelec").val().toUpperCase());
    if($("#orientationSelec").val().toUpperCase() === "HORIZONTAL") {
      if($("#shipSelec").val().toUpperCase() === "AIRCRAFTCARRIER") {
-       col_end = col_start + 5;
-     }
-     else if($("#shipSelec").val().toUpperCase() === "BATTLESHIP") {
        col_end = col_start + 4;
      }
-     else if($("#shipSelec").val().toUpperCase() === "CRUISER") {
+     else if($("#shipSelec").val().toUpperCase() === "BATTLESHIP") {
        col_end = col_start + 3;
+     }
+     else if($("#shipSelec").val().toUpperCase() === "CRUISER") {
+       col_end = col_start + 2;
      }
      else if($("#shipSelec").val().toUpperCase() === "DEESTROYER") {
        col_end = col_start + 2;
      }
      else if($("#shipSelec").val().toUpperCase() === "CLIPPER") {
-                 col_end = col_start + 3;
+                 col_end = col_start + 2;
           }
      else if($("#shipSelec").val().toUpperCase() === "DINGHY") {
                  col_end = col_start;
@@ -118,19 +118,19 @@ function placeShip() {
 
    else {
      if($("#shipSelec").val().toUpperCase() === "AIRCRAFTCARRIER") {
-       row_end = row_start + 5;
-     }
-     else if($("#shipSelec").val().toUpperCase() === "BATTLESHIP") {
        row_end = row_start + 4;
      }
-     else if($("#shipSelec").val().toUpperCase() === "CRUISER") {
+     else if($("#shipSelec").val().toUpperCase() === "BATTLESHIP") {
        row_end = row_start + 3;
+     }
+     else if($("#shipSelec").val().toUpperCase() === "CRUISER") {
+       row_end = row_start + 2;
      }
      else if($("#shipSelec").val().toUpperCase() === "DEESTROYER") {
        row_end = row_start + 2;
      }
      else if($("#shipSelec").val().toUpperCase() === "CLIPPER") {
-             row_end = row_start + 3;
+             row_end = row_start + 2;
      }
      else if($("#shipSelec").val().toUpperCase() === "DINGHY") {
              row_end = row_start;
@@ -247,8 +247,8 @@ function displayGameState(gameModel){
  displayShip(gameModel.cruiser);
  displayShip(gameModel.destroyer);
  displayShip(gameModel.submarine);
- displayCiv(gameModel.clipper);
- displayCiv(gameModel.dinghy);
+ displayShip(gameModel.clipper);
+ displayShip(gameModel.dinghy);
 
 for (var i = 0; i < gameModel.computerMisses.length; i++) {
    $( '#TheirBoard #' + gameModel.computerMisses[i].Across + '_' + gameModel.computerMisses[i].Down ).css("background-color", "none");
