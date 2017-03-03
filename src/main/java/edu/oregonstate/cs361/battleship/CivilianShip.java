@@ -10,5 +10,14 @@ public class CivilianShip extends Ship{
         super(n, l, s, e);
     }
 
-
+    public char AxisPositioning()
+    {
+        if(start.getDown() == end.getDown()){
+            return 'H';
+        }
+        else if(start.getAcross() == end.getAcross()){
+            return 'V';
+        }
+        return '0';
+    }
 }
