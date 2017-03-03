@@ -7,23 +7,22 @@ import java.util.Random;
  * Created by michaelhilton on 1/4/17.
  */
 public class BattleshipModel {
+    private Ship aircraftCarrier = new Ship("AircraftCarrier",5, new Coordinate(0,0),new Coordinate(0,0), false);
+    private Ship battleship = new Ship("Battleship",4, new Coordinate(0,0),new Coordinate(0,0), true);
+    private Ship cruiser = new Ship("Cruiser",3, new Coordinate(0,0),new Coordinate(0,0), false);
+    private Ship destroyer = new Ship("Destroyer",2, new Coordinate(0,0),new Coordinate(0,0), false);
+    private Ship submarine = new Ship("Submarine",2, new Coordinate(0,0),new Coordinate(0,0), true);
+    private  CivilianShip clipper = new CivilianShip("Clipper", 3, new Coordinate(0,0), new Coordinate(0,0), false);
+    private  CivilianShip dinghy = new CivilianShip("Dinghy", 1, new Coordinate(0,0), new Coordinate(0,0), false);
 
-    private Ship aircraftCarrier = new Ship("AircraftCarrier",5, new Coordinate(0,0),new Coordinate(0,0));
-    private Ship battleship = new Ship("Battleship",4, new Coordinate(0,0),new Coordinate(0,0));
-    private Ship cruiser = new Ship("Cruiser",3, new Coordinate(0,0),new Coordinate(0,0));
-    private Ship destroyer = new Ship("Destroyer",2, new Coordinate(0,0),new Coordinate(0,0));
-    private Ship submarine = new Ship("Submarine",2, new Coordinate(0,0),new Coordinate(0,0));
-    private  CivilianShip clipper = new CivilianShip("Clipper", 3, new Coordinate(0,0), new Coordinate(0,0));
-    private  CivilianShip dinghy = new CivilianShip("Dinghy", 1, new Coordinate(0,0), new Coordinate(0,0));
 
-
-    private Ship computer_aircraftCarrier = new Ship("Computer_AircraftCarrier",5, new Coordinate(2,2),new Coordinate(2,7));
-    private Ship computer_battleship = new Ship("Computer_Battleship",4, new Coordinate(2,8),new Coordinate(6,8));
-    private Ship computer_cruiser = new Ship("Computer_Cruiser",3, new Coordinate(4,1),new Coordinate(4,4));
-    private Ship computer_destroyer = new Ship("Computer_Destroyer",2, new Coordinate(7,3),new Coordinate(7,5));
-    private Ship computer_submarine = new Ship("Computer_Submarine",2, new Coordinate(9,6),new Coordinate(9,8));
-    private  CivilianShip computer_clipper = new CivilianShip("Computer_Clipper", 3, new Coordinate(1,10), new Coordinate(3,10));
-    private  CivilianShip computer_dinghy = new CivilianShip("Computer_Dinghy", 1, new Coordinate(1,1), new Coordinate(1,1));
+    private Ship computer_aircraftCarrier = new Ship("Computer_AircraftCarrier",5, new Coordinate(2,2),new Coordinate(2,7), false);
+    private Ship computer_battleship = new Ship("Computer_Battleship",4, new Coordinate(2,8),new Coordinate(6,8), true);
+    private Ship computer_cruiser = new Ship("Computer_Cruiser",3, new Coordinate(4,1),new Coordinate(4,4), false);
+    private Ship computer_destroyer = new Ship("Computer_Destroyer",2, new Coordinate(7,3),new Coordinate(7,5), false);
+    private Ship computer_submarine = new Ship("Computer_Submarine",2, new Coordinate(9,6),new Coordinate(9,8), true);
+    private  CivilianShip computer_clipper = new CivilianShip("Computer_Clipper", 3, new Coordinate(1,10), new Coordinate(3,10), false);
+    private  CivilianShip computer_dinghy = new CivilianShip("Computer_Dinghy", 1, new Coordinate(1,1), new Coordinate(1,1), false);
 
     ArrayList<Coordinate> playerHits;
     private ArrayList<Coordinate> playerMisses;
@@ -31,8 +30,6 @@ public class BattleshipModel {
     private ArrayList<Coordinate> computerMisses;
 
     boolean scanResult = false;
-
-
 
     public BattleshipModel() {
         playerHits = new ArrayList<>();
