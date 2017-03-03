@@ -21,11 +21,19 @@ function GameState_START(IsDonePlacingShip)
         $("#PlaceShipControl").addClass("hidden");
     }
 }
-
-
-function CheckAllPlayerShipsPlaced(){
+function CheckAllPlayerShipsPlaced()
+{
     IsAllPlaced = false;
 
+    //aircraftCarrier
+    /*if(gameModel.aircraftCarrier.end.Down != 0 ||gameModel.aircraftCarrier.end.Across != 0){
+        IsAllPlaced = true;
+    }
+    else{
+        IsAllPlaced = false
+    }*/
+
+    //battleship
     if(gameModel.battleship.end.Down != 0 ||gameModel.battleship.end.Across != 0){
         IsAllPlaced = true;
     }
@@ -57,29 +65,37 @@ function CheckAllPlayerShipsPlaced(){
         IsAllPlaced = false
     }
 
-
-    //clipper
-    if(gameModel.clipper.end.Down != 0 ||gameModel.clipper.end.Across != 0){
-        IsAllPlaced = true;
-    }
-    else{
-        IsAllPlaced = false
-    }
-
-
-    //dinghy
-    if(gameModel.dinghy.end.Down != 0 ||gameModel.dinghy.end.Across != 0){
-        IsAllPlaced = true;
-    }
-    else{
-        IsAllPlaced = false
-    }
-
     return IsAllPlaced;
 }
+/*
+function placeShip() {
+   console.log($( "#shipSelec" ).val());
+   console.log($( "#rowSelec" ).val());
+   console.log($( "#colSelec" ).val());
+   console.log($( "#orientationSelec" ).val());
 
+   //var menuId = $( "ul.nav" ).first().attr( "id" );
+   var request = $.ajax({
+     url: "/placeShip/"+$( "#shipSelec" ).val()+"/"+$( "#rowSelec" ).val()+"/"+$( "#colSelec" ).val()+"/"+$( "#orientationSelec" ).val(),
+     method: "post",
+     data: JSON.stringify(gameModel),
+     contentType: "application/json; charset=utf-8",
+     dataType: "json"
+   });
 
-function placeShip(){
+   request.done(function( currModel ) {
+     displayGameState(currModel);
+     gameModel = currModel;
+     GameState_START(CheckAllPlayerShipsPlaced());
+   });
+
+   request.fail(function( jqXHR, textStatus ) {
+     alert( "Request failed: " + textStatus );
+   });
+}
+*/
+
+function placeShip() {
    console.log($( "#shipSelec" ).val());
    console.log($( "#rowSelec" ).val());
    console.log($( "#colSelec" ).val());
@@ -105,16 +121,11 @@ function placeShip(){
      else if($("#shipSelec").val().toUpperCase() === "DEESTROYER") {
        col_end = col_start + 2;
      }
-     else if($("#shipSelec").val().toUpperCase() === "CLIPPER") {
-            col_end = col_start + 3;
-     }
-     else if($("#shipSelec").val().toUpperCase() === "DINGHY") {
-            col_end = col_start;
-     }
      else {
        col_end = col_start + 2;
      }
    }
+
    else {
      if($("#shipSelec").val().toUpperCase() === "AIRCRAFTCARRIER") {
        row_end = row_start + 5;
@@ -128,12 +139,6 @@ function placeShip(){
      else if($("#shipSelec").val().toUpperCase() === "DEESTROYER") {
        row_end = row_start + 2;
      }
-     else if($("#shipSelec").val().toUpperCase() === "CLIPPER") {
-       row_end = row_start + 3;
-     }
-     else if($("#shipSelec").val().toUpperCase() === "DINGHY") {
-       row_end = row_start;
-     }
      else {
        row_end = row_start + 2;
      }
@@ -144,16 +149,7 @@ function placeShip(){
     console.log(row_end);
     console.log(col_end);
 
-   if((row_start > gameModel.aircraftCarrier.end.Across || row_end < gameModel.aircraftCarrier.start.Across || col_start > gameModel.aircraftCarrier.end.Down || col_end < gameModel.aircraftCarrier.start.Down)
-    && (row_start > gameModel.battleship.end.Across || row_end < gameModel.battleship.start.Across || col_start > gameModel.battleship.end.Down || col_end < gameModel.battleship.start.Down)
-    && (row_start > gameModel.cruiser.end.Across || row_end < gameModel.cruiser.start.Across || col_start > gameModel.cruiser.end.Down || col_end < gameModel.cruiser.start.Down)
-    && (row_start > gameModel.destroyer.end.Across || row_end < gameModel.destroyer.start.Across || col_start > gameModel.destroyer.end.Down || col_end < gameModel.destroyer.start.Down)
-    && (row_start > gameModel.submarine.end.Across || row_end < gameModel.submarine.start.Across || col_start > gameModel.submarine.end.Down || col_end < gameModel.submarine.start.Down)
-    && (row_start > gameModel.clipper.end.Across || row_end < gameModel.clipper.start.Across || col_start > gameModel.clipper.end.Down || col_end < gameModel.clipper.start.Down)
-    && (row_start > gameModel.dinghy.end.Across || row_end < gameModel.dinghy.start.Across || col_start > gameModel.dinghy.end.Down || col_end < gameModel.dinghy.start.Down)
-    && row_end <= 10 && col_end <= 10)
-    {
-
+   if((row_start > gameModel.aircraftCarrier.end.Across || row_end < gameModel.aircraftCarrier.start.Across || col_start > gameModel.aircraftCarrier.end.Down || col_end < gameModel.aircraftCarrier.start.Down) && (row_start > gameModel.battleship.end.Across || row_end < gameModel.battleship.start.Across || col_start > gameModel.battleship.end.Down || col_end < gameModel.battleship.start.Down) && (row_start > gameModel.cruiser.end.Across || row_end < gameModel.cruiser.start.Across || col_start > gameModel.cruiser.end.Down || col_end < gameModel.cruiser.start.Down) && (row_start > gameModel.destroyer.end.Across || row_end < gameModel.destroyer.start.Across || col_start > gameModel.destroyer.end.Down || col_end < gameModel.destroyer.start.Down) && (row_start > gameModel.submarine.end.Across || row_end < gameModel.submarine.start.Across || col_start > gameModel.submarine.end.Down || col_end < gameModel.submarine.start.Down) && row_end <= 10 && col_end <= 10) {
      var request = $.ajax({
        url: "/placeShip/"+$( "#shipSelec" ).val()+"/"+$( "#rowSelec" ).val()+"/"+$( "#colSelec" ).val()+"/"+$( "#orientationSelec" ).val(),
        method: "post",
@@ -172,6 +168,7 @@ function placeShip(){
        alert( "Request failed: " + textStatus );
      });
    }
+
    else {
      alert("Error: Invalid Ship Placement.");
    }
@@ -241,13 +238,11 @@ function log(logContents){
 
 function displayGameState(gameModel){
 
-    displayShip(gameModel.aircraftCarrier);
-    displayShip(gameModel.battleship);
-    displayShip(gameModel.cruiser);
-    displayShip(gameModel.destroyer);
-    displayShip(gameModel.submarine);
-    displayCiv(gameModel.clipper);
-    displayCiv(gameModel.dinghy);
+displayShip(gameModel.aircraftCarrier);
+displayShip(gameModel.battleship);
+displayShip(gameModel.cruiser);
+displayShip(gameModel.destroyer);
+displayShip(gameModel.submarine);
 
 for (var i = 0; i < gameModel.computerMisses.length; i++) {
    $( '#TheirBoard #' + gameModel.computerMisses[i].Across + '_' + gameModel.computerMisses[i].Down ).css("background-color", "none");
@@ -274,34 +269,13 @@ for (var i = 0; i < gameModel.playerHits.length; i++) {
 
 }
 
-function displayCiv(ship){
 
-     startCoordAcross = ship.start.Across;
-     startCoordDown = ship.start.Down;
-     endCoordAcross = ship.end.Across;
-     endCoordDown = ship.end.Down;
-
-    if(startCoordAcross > 0){
-        if(startCoordAcross == endCoordAcross){
-            for (i = startCoordDown; i <= endCoordDown; i++) {
-                $( '#MyBoard #'+startCoordAcross+'_'+i  ).css("background-color", "none");
-                $( '#MyBoard #'+startCoordAcross+'_'+i  ).css("background-image", "url('../images/civPIC.png')");
-            }
-        } else {
-            for (i = startCoordAcross; i <= endCoordAcross; i++) {
-                $( '#MyBoard #'+i+'_'+startCoordDown  ).css("background-color", "none");
-                $( '#MyBoard #'+i+'_'+startCoordDown  ).css("background-image", "url('../images/civPIC.png')");
-            }
-        }
-     }
-}
 
 function displayShip(ship){
  startCoordAcross = ship.start.Across;
  startCoordDown = ship.start.Down;
  endCoordAcross = ship.end.Across;
  endCoordDown = ship.end.Down;
-
 // console.log(startCoordAcross);
  if(startCoordAcross > 0){
     if(startCoordAcross == endCoordAcross){
