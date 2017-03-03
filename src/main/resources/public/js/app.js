@@ -21,17 +21,10 @@ function GameState_START(IsDonePlacingShip)
         $("#PlaceShipControl").addClass("hidden");
     }
 }
+
 function CheckAllPlayerShipsPlaced()
 {
     IsAllPlaced = false;
-
-    //aircraftCarrier
-    /*if(gameModel.aircraftCarrier.end.Down != 0 ||gameModel.aircraftCarrier.end.Across != 0){
-        IsAllPlaced = true;
-    }
-    else{
-        IsAllPlaced = false
-    }*/
 
     //battleship
     if(gameModel.battleship.end.Down != 0 ||gameModel.battleship.end.Across != 0){
@@ -65,35 +58,26 @@ function CheckAllPlayerShipsPlaced()
         IsAllPlaced = false
     }
 
+    //clipper
+        if(gameModel.clipper.end.Down != 0 ||gameModel.clipper.end.Across != 0){
+            IsAllPlaced = true;
+        }
+        else{
+            IsAllPlaced = false
+        }
+
+      //dinghy
+        if(gameModel.dinghy.end.Down != 0 ||gameModel.dinghy.end.Across != 0){
+            IsAllPlaced = true;
+        }
+        else{
+            IsAllPlaced = false
+        }
+
+
     return IsAllPlaced;
 }
-/*
-function placeShip() {
-   console.log($( "#shipSelec" ).val());
-   console.log($( "#rowSelec" ).val());
-   console.log($( "#colSelec" ).val());
-   console.log($( "#orientationSelec" ).val());
 
-   //var menuId = $( "ul.nav" ).first().attr( "id" );
-   var request = $.ajax({
-     url: "/placeShip/"+$( "#shipSelec" ).val()+"/"+$( "#rowSelec" ).val()+"/"+$( "#colSelec" ).val()+"/"+$( "#orientationSelec" ).val(),
-     method: "post",
-     data: JSON.stringify(gameModel),
-     contentType: "application/json; charset=utf-8",
-     dataType: "json"
-   });
-
-   request.done(function( currModel ) {
-     displayGameState(currModel);
-     gameModel = currModel;
-     GameState_START(CheckAllPlayerShipsPlaced());
-   });
-
-   request.fail(function( jqXHR, textStatus ) {
-     alert( "Request failed: " + textStatus );
-   });
-}
-*/
 
 function placeShip() {
    console.log($( "#shipSelec" ).val());
@@ -121,6 +105,12 @@ function placeShip() {
      else if($("#shipSelec").val().toUpperCase() === "DEESTROYER") {
        col_end = col_start + 2;
      }
+     else if($("#shipSelec").val().toUpperCase() === "CLIPPER") {
+                 col_end = col_start + 3;
+          }
+     else if($("#shipSelec").val().toUpperCase() === "DINGHY") {
+                 col_end = col_start;
+     }
      else {
        col_end = col_start + 2;
      }
@@ -139,7 +129,12 @@ function placeShip() {
      else if($("#shipSelec").val().toUpperCase() === "DEESTROYER") {
        row_end = row_start + 2;
      }
-     else {
+     else if($("#shipSelec").val().toUpperCase() === "CLIPPER") {
+             row_end = row_start + 3;
+     }
+     else if($("#shipSelec").val().toUpperCase() === "DINGHY") {
+             row_end = row_start;
+     }else {
        row_end = row_start + 2;
      }
    }
@@ -149,7 +144,16 @@ function placeShip() {
     console.log(row_end);
     console.log(col_end);
 
-   if((row_start > gameModel.aircraftCarrier.end.Across || row_end < gameModel.aircraftCarrier.start.Across || col_start > gameModel.aircraftCarrier.end.Down || col_end < gameModel.aircraftCarrier.start.Down) && (row_start > gameModel.battleship.end.Across || row_end < gameModel.battleship.start.Across || col_start > gameModel.battleship.end.Down || col_end < gameModel.battleship.start.Down) && (row_start > gameModel.cruiser.end.Across || row_end < gameModel.cruiser.start.Across || col_start > gameModel.cruiser.end.Down || col_end < gameModel.cruiser.start.Down) && (row_start > gameModel.destroyer.end.Across || row_end < gameModel.destroyer.start.Across || col_start > gameModel.destroyer.end.Down || col_end < gameModel.destroyer.start.Down) && (row_start > gameModel.submarine.end.Across || row_end < gameModel.submarine.start.Across || col_start > gameModel.submarine.end.Down || col_end < gameModel.submarine.start.Down) && row_end <= 10 && col_end <= 10) {
+
+  if((row_start > gameModel.aircraftCarrier.end.Across || row_end < gameModel.aircraftCarrier.start.Across || col_start > gameModel.aircraftCarrier.end.Down || col_end < gameModel.aircraftCarrier.start.Down)
+    && (row_start > gameModel.battleship.end.Across || row_end < gameModel.battleship.start.Across || col_start > gameModel.battleship.end.Down || col_end < gameModel.battleship.start.Down)
+    && (row_start > gameModel.cruiser.end.Across || row_end < gameModel.cruiser.start.Across || col_start > gameModel.cruiser.end.Down || col_end < gameModel.cruiser.start.Down)
+    && (row_start > gameModel.destroyer.end.Across || row_end < gameModel.destroyer.start.Across || col_start > gameModel.destroyer.end.Down || col_end < gameModel.destroyer.start.Down)
+    && (row_start > gameModel.submarine.end.Across || row_end < gameModel.submarine.start.Across || col_start > gameModel.submarine.end.Down || col_end < gameModel.submarine.start.Down)
+    && (row_start > gameModel.clipper.end.Across || row_end < gameModel.clipper.start.Across || col_start > gameModel.clipper.end.Down || col_end < gameModel.clipper.start.Down)
+    && (row_start > gameModel.dinghy.end.Across || row_end < gameModel.dinghy.start.Across || col_start > gameModel.dinghy.end.Down || col_end < gameModel.dinghy.start.Down)
+    && row_end <= 10 && col_end <= 10)
+    {
      var request = $.ajax({
        url: "/placeShip/"+$( "#shipSelec" ).val()+"/"+$( "#rowSelec" ).val()+"/"+$( "#colSelec" ).val()+"/"+$( "#orientationSelec" ).val(),
        method: "post",
@@ -238,11 +242,13 @@ function log(logContents){
 
 function displayGameState(gameModel){
 
-displayShip(gameModel.aircraftCarrier);
-displayShip(gameModel.battleship);
-displayShip(gameModel.cruiser);
-displayShip(gameModel.destroyer);
-displayShip(gameModel.submarine);
+ displayShip(gameModel.aircraftCarrier);
+ displayShip(gameModel.battleship);
+ displayShip(gameModel.cruiser);
+ displayShip(gameModel.destroyer);
+ displayShip(gameModel.submarine);
+ displayCiv(gameModel.clipper);
+ displayCiv(gameModel.dinghy);
 
 for (var i = 0; i < gameModel.computerMisses.length; i++) {
    $( '#TheirBoard #' + gameModel.computerMisses[i].Across + '_' + gameModel.computerMisses[i].Down ).css("background-color", "none");
