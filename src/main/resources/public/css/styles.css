@@ -2,12 +2,10 @@
 body {
     margin: 0;
     padding: 0;
+    background-color:grey;
 }
 
 .gameBoard{
-/*with:100px;
-height:100px;*/
-background-color: Aquamarine;
 margin:20px;
 }
 
