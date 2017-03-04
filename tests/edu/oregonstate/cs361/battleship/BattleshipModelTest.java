@@ -95,8 +95,8 @@ class BattleshipModelTest {
         assertEquals(2, model.computerHits.get(0).getAcross());
         assertEquals(3, model.computerHits.get(0).getDown());
 
-        model.shootAtComputer(6,8) ;
-        assertEquals(6, model.computerHits.get(1).getAcross());
+        model.shootAtComputer(5,8) ;
+        assertEquals(5, model.computerHits.get(1).getAcross());
         assertEquals(8, model.computerHits.get(1).getDown());
 
         model.shootAtComputer(1,1) ;
@@ -158,9 +158,12 @@ class BattleshipModelTest {
     void testsScan() {
         BattleshipModel model = new BattleshipModel();
         model.scan(2,2);
-        assertEquals(true,model.getScanResult());
+        assertEquals(true, model.getScanResult());
 
         model.scan(6,6);
-        assertEquals(false,model.getScanResult());
+        assertEquals(false, model.getScanResult());
+
+        model.scan(9,6);
+        assertEquals(false, model.getScanResult());
     }
 }

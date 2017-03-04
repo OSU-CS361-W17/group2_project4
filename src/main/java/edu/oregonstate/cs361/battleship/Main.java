@@ -82,7 +82,4 @@ public class Main {
         Gson gson = new Gson();
         return gson.toJson(currModel);
     }
-
-
-
 }
