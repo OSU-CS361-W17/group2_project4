@@ -34,22 +34,6 @@ function CheckAllPlayerShipsPlaced()
         IsAllPlaced = false
     }
 
-    //cruiser
-    if(gameModel.cruiser.end.Down != 0 ||gameModel.cruiser.end.Across != 0){
-        IsAllPlaced = true;
-    }
-    else{
-        IsAllPlaced = false
-    }
-
-    //destroyer
-    if(gameModel.destroyer.end.Down != 0 ||gameModel.destroyer.end.Across != 0){
-        IsAllPlaced = true;
-    }
-    else{
-        IsAllPlaced = false
-    }
-
     //submarine
     if(gameModel.submarine.end.Down != 0 ||gameModel.submarine.end.Across != 0){
         IsAllPlaced = true;
@@ -59,21 +43,20 @@ function CheckAllPlayerShipsPlaced()
     }
 
     //clipper
-        if(gameModel.clipper.end.Down != 0 ||gameModel.clipper.end.Across != 0){
-            IsAllPlaced = true;
-        }
-        else{
-            IsAllPlaced = false
-        }
+    if(gameModel.clipper.end.Down != 0 ||gameModel.clipper.end.Across != 0){
+        IsAllPlaced = true;
+    }
+    else{
+        IsAllPlaced = false
+    }
 
-      //dinghy
-        if(gameModel.dinghy.end.Down != 0 ||gameModel.dinghy.end.Across != 0){
-            IsAllPlaced = true;
-        }
-        else{
-            IsAllPlaced = false
-        }
-
+    //dinghy
+    if(gameModel.dinghy.end.Down != 0 ||gameModel.dinghy.end.Across != 0){
+        IsAllPlaced = true;
+    }
+    else{
+        IsAllPlaced = false
+    }
 
     return IsAllPlaced;
 }
@@ -99,12 +82,6 @@ function placeShip() {
      else if($("#shipSelec").val().toUpperCase() === "BATTLESHIP") {
        col_end = col_start + 3;
      }
-     else if($("#shipSelec").val().toUpperCase() === "CRUISER") {
-       col_end = col_start + 2;
-     }
-     else if($("#shipSelec").val().toUpperCase() === "DEESTROYER") {
-       col_end = col_start + 2;
-     }
      else if($("#shipSelec").val().toUpperCase() === "CLIPPER") {
                  col_end = col_start + 2;
           }
@@ -123,12 +100,6 @@ function placeShip() {
      else if($("#shipSelec").val().toUpperCase() === "BATTLESHIP") {
        row_end = row_start + 3;
      }
-     else if($("#shipSelec").val().toUpperCase() === "CRUISER") {
-       row_end = row_start + 2;
-     }
-     else if($("#shipSelec").val().toUpperCase() === "DEESTROYER") {
-       row_end = row_start + 2;
-     }
      else if($("#shipSelec").val().toUpperCase() === "CLIPPER") {
              row_end = row_start + 2;
      }
@@ -144,11 +115,8 @@ function placeShip() {
     console.log(row_end);
     console.log(col_end);
 
-
   if((row_start > gameModel.aircraftCarrier.end.Across || row_end < gameModel.aircraftCarrier.start.Across || col_start > gameModel.aircraftCarrier.end.Down || col_end < gameModel.aircraftCarrier.start.Down)
     && (row_start > gameModel.battleship.end.Across || row_end < gameModel.battleship.start.Across || col_start > gameModel.battleship.end.Down || col_end < gameModel.battleship.start.Down)
-    && (row_start > gameModel.cruiser.end.Across || row_end < gameModel.cruiser.start.Across || col_start > gameModel.cruiser.end.Down || col_end < gameModel.cruiser.start.Down)
-    && (row_start > gameModel.destroyer.end.Across || row_end < gameModel.destroyer.start.Across || col_start > gameModel.destroyer.end.Down || col_end < gameModel.destroyer.start.Down)
     && (row_start > gameModel.submarine.end.Across || row_end < gameModel.submarine.start.Across || col_start > gameModel.submarine.end.Down || col_end < gameModel.submarine.start.Down)
     && (row_start > gameModel.clipper.end.Across || row_end < gameModel.clipper.start.Across || col_start > gameModel.clipper.end.Down || col_end < gameModel.clipper.start.Down)
     && (row_start > gameModel.dinghy.end.Across || row_end < gameModel.dinghy.start.Across || col_start > gameModel.dinghy.end.Down || col_end < gameModel.dinghy.start.Down)
@@ -177,9 +145,6 @@ function placeShip() {
      alert("Error: Invalid Ship Placement.");
    }
 }
-
-
-
 
 function fire(){
  console.log($( "#colFire" ).val());
@@ -244,8 +209,6 @@ function displayGameState(gameModel){
 
  displayShip(gameModel.aircraftCarrier);
  displayShip(gameModel.battleship);
- displayShip(gameModel.cruiser);
- displayShip(gameModel.destroyer);
  displayShip(gameModel.submarine);
  displayShip(gameModel.clipper);
  displayShip(gameModel.dinghy);
