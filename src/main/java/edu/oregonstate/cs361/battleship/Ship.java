@@ -18,7 +18,6 @@ public class Ship {
         stealth = st;
     }
 
-
     public void setLocation(Coordinate s, Coordinate e) {
         start = s;
         end = e;
@@ -31,7 +30,8 @@ public class Ship {
                 if((test.getDown() >= start.getDown()) &&
                 (test.getDown() <= end.getDown()))
                 return true;
-            } else {
+            }
+            else {
                 return false;
             }
         }
@@ -41,7 +41,8 @@ public class Ship {
                 if((test.getAcross() >= start.getAcross()) &&
                         (test.getAcross() <= end.getAcross()))
                     return true;
-            } else {
+            }
+            else {
                 return false;
             }
 
@@ -52,7 +53,6 @@ public class Ship {
     public String getName() {
         return name;
     }
-
 
     public boolean scan(Coordinate coor) {
         if(stealth) {
