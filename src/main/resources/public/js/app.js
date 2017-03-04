@@ -21,39 +21,39 @@ function GameState_START(IsDonePlacingShip) {
 }
 
 function CheckAllPlayerShipsPlaced() {
-    IsAllPlaced = false;
+    var aircraftCarrier_placed = false;
+    var battleship_placed = false;
+    var submarine_placed = false;
+    var clipper_placed = false;
+    var dinghy_placed = false;
 
     //battleship
-    if(gameModel.battleship.end.Down != 0 ||gameModel.battleship.end.Across != 0){
-        IsAllPlaced = true;
-    }else{
-        IsAllPlaced = false
+    if(gameModel.aircraftCarrier.end.Down != 0 ||gameModel.aircraftCarrier.end.Across != 0){
+        aircraftCarrier_placed = true;
     }
-
+    //battleship
+    if(gameModel.battleship.end.Down != 0 ||gameModel.battleship.end.Across != 0){
+        battleship_placed = true;
+    }
     //submarine
     if(gameModel.submarine.end.Down != 0 ||gameModel.submarine.end.Across != 0){
-        IsAllPlaced = true;
-    }else{
-        IsAllPlaced = false
+        submarine_placed = true;
     }
-
     //clipper
     if(gameModel.clipper.end.Down != 0 ||gameModel.clipper.end.Across != 0){
-        IsAllPlaced = true;
-    }else{
-        IsAllPlaced = false
+        clipper_placed = true;
     }
-
     //dinghy
     if(gameModel.dinghy.end.Down != 0 ||gameModel.dinghy.end.Across != 0){
-        IsAllPlaced = true;
-    }else{
-        IsAllPlaced = false
+        dinghy_placed = true;
     }
 
-    return IsAllPlaced;
+    return (aircraftCarrier_placed &&
+            battleship_placed &&
+            submarine_placed &&
+            clipper_placed &&
+            dinghy_placed);
 }
-
 
 function placeShip() {
     console.log($( "#shipSelec" ).val());
