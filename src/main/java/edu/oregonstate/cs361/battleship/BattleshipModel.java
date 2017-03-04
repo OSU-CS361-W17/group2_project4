@@ -7,7 +7,6 @@ import java.util.Random;
  * Created by michaelhilton on 1/4/17.
  */
 public class BattleshipModel {
-
     private Ship aircraftCarrier = new Ship("AircraftCarrier",5, new Coordinate(0,0),new Coordinate(0,0),false);
     private Ship battleship = new Ship("Battleship",4, new Coordinate(0,0),new Coordinate(0,0),true);
     private Ship submarine = new Ship("Submarine",2, new Coordinate(0,0),new Coordinate(0,0),true);
@@ -25,7 +24,7 @@ public class BattleshipModel {
     public ArrayList<Coordinate> playerMisses;
     public ArrayList<Coordinate> computerHits;
     public ArrayList<Coordinate> computerMisses;
-
+  
     boolean scanResult = false;
 
     public BattleshipModel() {
@@ -42,12 +41,25 @@ public class BattleshipModel {
             return battleship;
         }if(shipName.equalsIgnoreCase("submarine")) {
             return submarine;
-        }if(shipName.equalsIgnoreCase("clipper")) {
+        } if(shipName.equalsIgnoreCase("clipper")) {
             return clipper;
-        }if(shipName.equalsIgnoreCase("dinghy")) {
+        } if(shipName.equalsIgnoreCase("dinghy")) {
             return dinghy;
-        }
-        else {
+        } if (shipName.equalsIgnoreCase("computer_aircraftcarrier")) {
+            return computer_aircraftCarrier;
+        } if(shipName.equalsIgnoreCase("computer_battleship")) {
+            return computer_battleship;
+        } if(shipName.equalsIgnoreCase("computer_Cruiser")) {
+            return computer_cruiser;
+        } if(shipName.equalsIgnoreCase("computer_destroyer")) {
+            return computer_destroyer;
+        } if(shipName.equalsIgnoreCase("computer_submarine")) {
+            return computer_submarine;
+        } if(shipName.equalsIgnoreCase("computer_clipper")) {
+            return computer_clipper;
+        } if(shipName.equalsIgnoreCase("computer_dinghy")) {
+            return computer_dinghy;
+        } else {
             return null;
         }
     }
@@ -116,7 +128,6 @@ public class BattleshipModel {
                 }
             }
 
-            computerHits.add(coor);
         }else if (computer_dinghy.covers(coor)) {
             computerHits.add(coor);
         }else {
@@ -188,6 +199,22 @@ public class BattleshipModel {
         }else {
             scanResult = false;
         }
+    }
+
+    public int getPlayerHits() {
+        return playerHits.size();
+    }
+
+    public int getPlayerMisses() {
+        return playerMisses.size();
+    }
+
+    public int getComputerHits() {
+        return computerHits.size();
+    }
+
+    public int getComputerMisses() {
+        return computerMisses.size();
     }
 
     public boolean getScanResult() {

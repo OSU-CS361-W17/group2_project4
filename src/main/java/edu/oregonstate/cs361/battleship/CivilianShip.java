@@ -15,9 +15,8 @@ public class CivilianShip extends Ship{
         if(start.getDown() == end.getDown()){
             return 'H';
         }
-        else if(start.getAcross() == end.getAcross()){
+        else {
             return 'V';
         }
-        return '0';
     }
 }
