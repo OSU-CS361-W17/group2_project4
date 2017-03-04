@@ -165,5 +165,17 @@ class BattleshipModelTest {
 
         model.scan(9,6);
         assertEquals(false, model.getScanResult());
+
+        model.scan(2,8);
+        assertEquals(false, model.getScanResult());
+
+        model.scan(3, 2);
+        assertEquals(true, model.getScanResult());
+
+        model.scan(1,9);
+        assertEquals(true, model.getScanResult());
+
+        model.scan(1,1);
+        assertEquals(true, model.getScanResult());
     }
 }
