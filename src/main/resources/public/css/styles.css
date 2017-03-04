@@ -2,12 +2,23 @@
 body {
     margin: 0;
     padding: 0;
+    background-color: black;
+}
+
+#logo {
+    display: block;
+    margin: auto;
+}
+
+.col-lg-6.panel.panel-default{
+
+    background-color: #696969;
 }
 
 .gameBoard{
 /*with:100px;
 height:100px;*/
-background-color: Aquamarine;
+background-color: gray;
 margin:20px;
 }
 
