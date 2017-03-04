@@ -143,7 +143,7 @@ public class BattleshipModel {
 
     void playerShot(Coordinate coor) {
         if(playerMisses.contains(coor)){
-            System.out.println("Dupe");
+            System.out.println("Duplicate fire.");
         }
 
         if(aircraftCarrier.covers(coor)){
@@ -183,12 +183,11 @@ public class BattleshipModel {
         }
         else if (computer_battleship.scan(coor)){
             scanResult = true;
-        }
-        else if (computer_submarine.scan(coor)){
+        } else if (computer_submarine.scan(coor)){
             scanResult = true;
-        }else if (computer_clipper.scan(coor)){
+        } else if (computer_clipper.scan(coor)){
             scanResult = true;
-        }else if (computer_dinghy.scan(coor)) {
+        } else if (computer_dinghy.scan(coor)) {
             scanResult = true;
         }else {
             scanResult = false;
