@@ -8,6 +8,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * Created by michaelhilton on 2/7/17.
  */
 class BattleshipModelTest {
+    @Test
+    void BattleshipModel(){
+        BattleshipModel model= new BattleshipModel();
+        assert(model != null);
+    }
 
     @Test
     void getShip() {
