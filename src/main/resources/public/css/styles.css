@@ -16,9 +16,11 @@ body {
 }
 
 .gameBoard{
-/*with:100px;
-height:100px;*/
 background-color: gray;
+
+}
+
+.gameBoard{
 margin:20px;
 }
 
