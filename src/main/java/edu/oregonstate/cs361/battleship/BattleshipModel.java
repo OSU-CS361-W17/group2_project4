@@ -12,17 +12,16 @@ public class BattleshipModel {
     private Ship cruiser = new Ship("Cruiser",3, new Coordinate(0,0),new Coordinate(0,0), false);
     private Ship destroyer = new Ship("Destroyer",2, new Coordinate(0,0),new Coordinate(0,0), false);
     private Ship submarine = new Ship("Submarine",2, new Coordinate(0,0),new Coordinate(0,0), true);
-    private  CivilianShip clipper = new CivilianShip("Clipper", 3, new Coordinate(0,0), new Coordinate(0,0), false);
-    private  CivilianShip dinghy = new CivilianShip("Dinghy", 1, new Coordinate(0,0), new Coordinate(0,0), false);
-
+    private CivilianShip clipper = new CivilianShip("Clipper", 3, new Coordinate(0,0), new Coordinate(0,0), false);
+    private CivilianShip dinghy = new CivilianShip("Dinghy", 1, new Coordinate(0,0), new Coordinate(0,0), false);
 
     private Ship computer_aircraftCarrier = new Ship("Computer_AircraftCarrier",5, new Coordinate(2,2),new Coordinate(2,7), false);
     private Ship computer_battleship = new Ship("Computer_Battleship",4, new Coordinate(2,8),new Coordinate(6,8), true);
     private Ship computer_cruiser = new Ship("Computer_Cruiser",3, new Coordinate(4,1),new Coordinate(4,4), false);
     private Ship computer_destroyer = new Ship("Computer_Destroyer",2, new Coordinate(7,3),new Coordinate(7,5), false);
     private Ship computer_submarine = new Ship("Computer_Submarine",2, new Coordinate(9,6),new Coordinate(9,8), true);
-    private  CivilianShip computer_clipper = new CivilianShip("Computer_Clipper", 3, new Coordinate(1,10), new Coordinate(3,10), false);
-    private  CivilianShip computer_dinghy = new CivilianShip("Computer_Dinghy", 1, new Coordinate(1,1), new Coordinate(1,1), false);
+    private CivilianShip computer_clipper = new CivilianShip("Computer_Clipper", 3, new Coordinate(1,10), new Coordinate(3,10), false);
+    private CivilianShip computer_dinghy = new CivilianShip("Computer_Dinghy", 1, new Coordinate(1,1), new Coordinate(1,1), false);
 
     ArrayList<Coordinate> playerHits;
     private ArrayList<Coordinate> playerMisses;
@@ -38,7 +37,6 @@ public class BattleshipModel {
         computerMisses= new ArrayList<>();
     }
 
-
     public Ship getShip(String shipName) {
         if (shipName.equalsIgnoreCase("aircraftcarrier")) {
             return aircraftCarrier;
@@ -48,14 +46,27 @@ public class BattleshipModel {
             return cruiser;
         } if(shipName.equalsIgnoreCase("destroyer")) {
             return destroyer;
-        }if(shipName.equalsIgnoreCase("submarine")) {
+        } if(shipName.equalsIgnoreCase("submarine")) {
             return submarine;
-        }if(shipName.equalsIgnoreCase("clipper")) {
+        } if(shipName.equalsIgnoreCase("clipper")) {
             return clipper;
-        }if(shipName.equalsIgnoreCase("dinghy")) {
+        } if(shipName.equalsIgnoreCase("dinghy")) {
             return dinghy;
-        }
-        else {
+        } if (shipName.equalsIgnoreCase("computer_aircraftcarrier")) {
+            return computer_aircraftCarrier;
+        } if(shipName.equalsIgnoreCase("computer_battleship")) {
+            return computer_battleship;
+        } if(shipName.equalsIgnoreCase("computer_Cruiser")) {
+            return computer_cruiser;
+        } if(shipName.equalsIgnoreCase("computer_destroyer")) {
+            return computer_destroyer;
+        } if(shipName.equalsIgnoreCase("computer_submarine")) {
+            return computer_submarine;
+        } if(shipName.equalsIgnoreCase("computer_clipper")) {
+            return computer_clipper;
+        } if(shipName.equalsIgnoreCase("computer_dinghy")) {
+            return computer_dinghy;
+        } else {
             return null;
         }
     }
@@ -130,7 +141,6 @@ public class BattleshipModel {
                 }
             }
 
-            computerHits.add(coor);
         }else if (computer_dinghy.covers(coor)) {
             computerHits.add(coor);
         }else {
@@ -209,6 +219,22 @@ public class BattleshipModel {
         }else {
             scanResult = false;
         }
+    }
+
+    public int getPlayerHits() {
+        return playerHits.size();
+    }
+
+    public int getPlayerMisses() {
+        return playerMisses.size();
+    }
+
+    public int getComputerHits() {
+        return computerHits.size();
+    }
+
+    public int getComputerMisses() {
+        return computerMisses.size();
     }
 
     public boolean getScanResult() {
