@@ -9,12 +9,9 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class BattleshipModelTest {
     @Test
-    BattleshipModel(){
+    void BattleshipModel(){
         BattleshipModel model= new BattleshipModel();
-        assertEquals(NULL,playerHits);
-        assertEquals(NULL,playerMisses);
-        assertEquals(NULL,computerHits);
-        assertEquals(NULL,computerMisses);
+        assert(model != null);
     }
 
     @Test
