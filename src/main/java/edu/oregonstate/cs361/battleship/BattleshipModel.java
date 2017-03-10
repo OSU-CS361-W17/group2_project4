@@ -69,6 +69,192 @@ public class BattleshipModel {
         }
     }
 
+    public boolean CoversComputerShips(Coordinate coorStart, Coordinate coorEnd){
+        Coordinate coor;
+        int Shiplength;
+        char Orientation;
+
+        if(coorStart.getAcross() == coorEnd.getAcross()){
+            Shiplength = coorEnd.getAcross() - coorStart.getAcross();
+            Orientation = 'A';
+        }
+        else{
+            Shiplength = coorEnd.getDown() - coorStart.getDown();
+            Orientation = 'D';
+        }
+
+        for(int i = 0; i < Shiplength;i++){
+            if (Orientation== 'A'){
+                coor = new Coordinate(coorStart.getAcross()+i,coorStart.getDown());
+                if( computer_aircraftCarrier.covers(coor) &&
+                        computer_battleship.covers(coor) &&
+                        computer_submarine.covers(coor) &&
+                        computer_clipper.covers(coor) &&
+                        computer_dinghy.covers(coor)
+                        ){
+                    return true;
+                }
+            }
+            else{
+                coor = new Coordinate(coorStart.getAcross(),coorStart.getDown()+i);
+                if( computer_aircraftCarrier.covers(coor) &&
+                        computer_battleship.covers(coor) &&
+                        computer_submarine.covers(coor) &&
+                        computer_clipper.covers(coor) &&
+                        computer_dinghy.covers(coor)
+                        ){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean WithinBounds(Coordinate coor){
+        int max = 10;
+        int min = 1;
+
+        if(coor.getAcross() <= max && coor.getDown() >= min){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public BattleshipModel placeComputerShipsHard(){
+        int max = 10;
+        int min = 1;
+        Random random = new Random();
+        int randRow;
+        int randCol;
+        int randOren;
+
+        Coordinate coorS;
+        Coordinate coorE;
+
+        while(true){
+            randRow = random.nextInt(max - min + 1) + min;
+            randCol = random.nextInt(max - min + 1) + min;
+            randOren = random.nextInt(1) + 0;
+
+            //AirCraftCarrier length 5
+            if(randOren == 1){
+                coorS = new Coordinate(randRow,randCol);
+                coorE = new Coordinate(randRow + 4,randCol);
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
+                    computer_aircraftCarrier.setLocation(coorS,coorE);
+                    break;
+                }
+            }
+            else{
+                coorS = new Coordinate(randRow,randCol);
+                coorE = new Coordinate(randRow ,randCol + 4);
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
+                    computer_aircraftCarrier.setLocation(coorS,coorE);
+                    break;
+                }
+            }
+        }
+
+        while(true){
+            randRow = random.nextInt(max - min + 1) + min;
+            randCol = random.nextInt(max - min + 1) + min;
+            randOren = random.nextInt(1) + 0;
+
+            //battleship length 4
+            if(randOren == 1){
+                coorS = new Coordinate(randRow,randCol);
+                coorE = new Coordinate(randRow + 3,randCol);
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
+                    computer_battleship.setLocation(coorS,coorE);
+                    break;
+                }
+            }
+            else{
+                coorS = new Coordinate(randRow,randCol);
+                coorE = new Coordinate(randRow ,randCol + 3);
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
+                    computer_battleship.setLocation(coorS,coorE);
+                    break;
+                }
+            }
+        }
+
+        while(true){
+            randRow = random.nextInt(max - min + 1) + min;
+            randCol = random.nextInt(max - min + 1) + min;
+            randOren = random.nextInt(1) + 0;
+
+            //submarine length 3
+            if(randOren == 1){
+                coorS = new Coordinate(randRow,randCol);
+                coorE = new Coordinate(randRow + 2,randCol);
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
+                    computer_submarine.setLocation(coorS,coorE);
+                    break;
+                }
+            }
+            else{
+                coorS = new Coordinate(randRow,randCol);
+                coorE = new Coordinate(randRow ,randCol + 2);
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
+                    computer_submarine.setLocation(coorS,coorE);
+                    break;
+                }
+            }
+        }
+
+        while(true){
+            randRow = random.nextInt(max - min + 1) + min;
+            randCol = random.nextInt(max - min + 1) + min;
+            randOren = random.nextInt(1) + 0;
+
+            //clipper length 3
+            if(randOren == 1){
+                coorS = new Coordinate(randRow,randCol);
+                coorE = new Coordinate(randRow + 2,randCol);
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
+                    computer_clipper.setLocation(coorS,coorE);
+                    break;
+                }
+            }
+            else{
+                coorS = new Coordinate(randRow,randCol);
+                coorE = new Coordinate(randRow ,randCol + 2);
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
+                    computer_clipper.setLocation(coorS,coorE);
+                    break;
+                }
+            }
+        }
+
+        while(true){
+            randRow = random.nextInt(max - min + 1) + min;
+            randCol = random.nextInt(max - min + 1) + min;
+            randOren = random.nextInt(1) + 0;
+
+            //dinghy length 1
+            if(randOren == 1){
+                coorS = new Coordinate(randRow,randCol);
+                coorE = new Coordinate(randRow,randCol);
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
+                    computer_clipper.setLocation(coorS,coorE);
+                    break;
+                }
+            }
+            else{
+                coorS = new Coordinate(randRow,randCol);
+                coorE = new Coordinate(randRow ,randCol);
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
+                    computer_clipper.setLocation(coorS,coorE);
+                    break;
+                }
+            }
+        }
+        return this;
+    }
+
     public BattleshipModel placeShip(String shipName, String row, String col, String orientation) {
         int rowint = Integer.parseInt(row);
         int colInt = Integer.parseInt(col);
