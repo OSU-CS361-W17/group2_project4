@@ -35,6 +35,51 @@ class BattleshipModelTest {
     }
 
     @Test
+    void WithinBounds(){
+        BattleshipModel bm = new BattleshipModel();
+        Coordinate OutOfBounds = new Coordinate(12,1);
+        Coordinate InBounds = new Coordinate(3,3);
+
+        assertEquals(false,bm.WithinBounds(OutOfBounds) );
+        assertEquals(true,bm.WithinBounds(InBounds));
+    }
+
+    @Test
+    void CoversComputerShips(){
+        BattleshipModel bm = new BattleshipModel();
+        Coordinate OnAShip1 = new Coordinate(1,1);
+        Coordinate OnAShip2 = new Coordinate(10,1);
+        Coordinate NotOnAShip1 = new Coordinate(2,2);
+        Coordinate NotOnAShip2 = new Coordinate(3,2);
+
+        assertEquals(true,bm.CoversComputerShips(new Coordinate(1,1),new Coordinate(10,1)));
+        assertEquals(true,bm.CoversComputerShips(new Coordinate(1,1),new Coordinate(1,10)));
+
+        assertEquals(true,bm.CoversComputerShips(new Coordinate(1,5),new Coordinate(10,5)));
+        assertEquals(false,bm.CoversComputerShips(new Coordinate(5,1),new Coordinate(5,10)));
+    }
+
+    @Test
+    void placeShipRandomly(){
+        BattleshipModel bm = new BattleshipModel();
+    }
+
+    @Test
+    void placeComputerShipsHard(){
+        BattleshipModel bm = new BattleshipModel();
+        bm.placeComputerShipsHard();
+        bm.placeComputerShipsHard();
+        bm.placeComputerShipsHard();
+        bm.placeComputerShipsHard();
+
+        assert(bm.computer_aircraftCarrier != null);
+        assert(bm.computer_battleship != null);
+        assert(bm.computer_submarine != null);
+        assert(bm.computer_clipper != null);
+        assert(bm.computer_dinghy != null);
+    }
+
+    @Test
     void placeShip() {
         BattleshipModel model = new BattleshipModel();
         assertEquals(true,
