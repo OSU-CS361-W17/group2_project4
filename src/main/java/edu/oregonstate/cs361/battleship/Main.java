@@ -27,6 +27,7 @@ public class Main {
     //This function returns a new model
     private static String newModel() {
         BattleshipModel bm = new BattleshipModel();
+        bm.placeComputerShipsHard();
         Gson gson = new Gson();
         return gson.toJson(bm);
     }
