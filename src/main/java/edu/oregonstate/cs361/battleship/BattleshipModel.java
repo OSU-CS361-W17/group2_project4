@@ -23,9 +23,23 @@ public class BattleshipModel {
     public ArrayList<Coordinate> playerMisses;
     public ArrayList<Coordinate> computerHits;
     public ArrayList<Coordinate> computerMisses;
-  
-    boolean scanResult = false;
+    public Coordinate lastComputerShot;
 
+    boolean scanResult = false;
+    // (͡°͜ʖ͡°)
+    boolean hardMode = false;
+    // (͡°͜ʖ͡°)
+/*    */
+/*            ╔══╗ Put this on your wall*/
+/*            ║╔╗║    if you love anime!*/
+/*            ║╚╝╠══╦╦══╦═╗*/
+/*            ║╔╗║╔╗║║║║║╩╣*/
+/*            ╚╝╚╩╝╚╩╩╩╩╩═╝*/
+        /*╔╦╦╦╗OMG */
+        /*╠╬╬╬╣CHOCOLATE!! */
+        /*╠╬╬╬╣Put this on your page */
+        /*╠╬╬╬╣If you LOVE */
+        /*╚╩╩╩╝♥ CHOCOLATE */
     public BattleshipModel() {
         playerHits = new ArrayList<>();
         playerMisses= new ArrayList<>();
@@ -148,14 +162,39 @@ public class BattleshipModel {
         }
     }
 
+
+    public Coordinate shootAdditional(Coordinate coor){
+        if(playerMisses.contains(coor)){
+
+        }else if(){
+
+        }
+
+    }
+
     public void shootAtPlayer() {
-        int max = 10;
-        int min = 1;
-        Random random = new Random();
-        int randRow = random.nextInt(max - min + 1) + min;
-        int randCol = random.nextInt(max - min + 1) + min;
+       int randRow;
+       int randCol;
+       if(hardMode == true){
+           Coordinate lastHit = playerHits.get(playerHits.size() -1);
+           if(lastHit == lastComputerShot) {
+               randCol = lastHit.getAcross() + 1;
+               randRow = lastHit.getDown();
+           }else{
+
+           }
+
+       }
+       else {
+           int max = 10;
+           int min = 1;
+           Random random = new Random();
+           randRow = random.nextInt(max - min + 1) + min;
+           randCol = random.nextInt(max - min + 1) + min;
+       }
 
         Coordinate coor = new Coordinate(randRow,randCol);
+        lastComputerShot = coor;
         playerShot(coor);
     }
 
