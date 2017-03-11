@@ -13,11 +13,11 @@ public class BattleshipModel {
     private  CivilianShip clipper = new CivilianShip("Clipper", 3, new Coordinate(0,0), new Coordinate(0,0),false);
     private  CivilianShip dinghy = new CivilianShip("Dinghy", 1, new Coordinate(0,0), new Coordinate(0,0),false);
 
-    private Ship computer_aircraftCarrier = new Ship("Computer_AircraftCarrier",5, new Coordinate(2,2),new Coordinate(2,6),false);
-    private Ship computer_battleship = new Ship("Computer_Battleship",4, new Coordinate(2,8),new Coordinate(5,8),true);
-    private Ship computer_submarine = new Ship("Computer_Submarine",3, new Coordinate(9,6),new Coordinate(9,8),true);
-    private  CivilianShip computer_clipper = new CivilianShip("Computer_Clipper", 3, new Coordinate(1,10), new Coordinate(3,10),false);
-    private  CivilianShip computer_dinghy = new CivilianShip("Computer_Dinghy", 1, new Coordinate(1,1), new Coordinate(1,1),false);
+    public Ship computer_aircraftCarrier = new Ship("Computer_AircraftCarrier",5, new Coordinate(2,2),new Coordinate(2,6),false);
+    public Ship computer_battleship = new Ship("Computer_Battleship",4, new Coordinate(2,8),new Coordinate(5,8),true);
+    public Ship computer_submarine = new Ship("Computer_Submarine",3, new Coordinate(9,6),new Coordinate(9,8),true);
+    public  CivilianShip computer_clipper = new CivilianShip("Computer_Clipper", 3, new Coordinate(1,10), new Coordinate(3,10),false);
+    public CivilianShip computer_dinghy = new CivilianShip("Computer_Dinghy", 1, new Coordinate(1,1), new Coordinate(1,1),false);
 
     public ArrayList<Coordinate> playerHits;
     public ArrayList<Coordinate> playerMisses;
@@ -85,6 +85,96 @@ public class BattleshipModel {
         else {
             return null;
         }
+    }
+
+    public boolean CoversComputerShips(Coordinate coorStart, Coordinate coorEnd){
+        Coordinate coor;
+        int Shiplength;
+        char Orientation;
+
+        if(coorStart.getAcross() == coorEnd.getAcross()){
+            Shiplength = coorEnd.getDown() - coorStart.getDown();
+            Orientation = 'A';
+        }
+        else{
+            Shiplength = coorEnd.getAcross() - coorStart.getAcross();
+            Orientation = 'D';
+        }
+
+        for(int i = 0; i < Shiplength;i++){
+            if (Orientation== 'A'){
+                coor = new Coordinate(coorStart.getAcross()+i,coorStart.getDown());
+                if( computer_aircraftCarrier.covers(coor) || computer_battleship.covers(coor) || computer_submarine.covers(coor) || computer_clipper.covers(coor) || computer_dinghy.covers(coor)){
+                    return true;
+                }
+            }
+            else{
+                coor = new Coordinate(coorStart.getAcross(),coorStart.getDown()+i);
+                if( computer_aircraftCarrier.covers(coor) || computer_battleship.covers(coor) || computer_submarine.covers(coor) || computer_clipper.covers(coor) || computer_dinghy.covers(coor)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean WithinBounds(Coordinate coor){
+        int max = 11;
+        int min = 0;
+
+        if(coor.getAcross() < max && coor.getAcross() > min && coor.getDown() < max && coor.getDown() > min){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public void placeShipRandomly(Ship ship){
+        int max = 10;
+        int min = 1;
+        int shipLength = ship.length - 1;
+
+        int randRow;
+        int randCol;
+        int randOren;
+
+        Random random = new Random();
+        Coordinate coorS;
+        Coordinate coorE;
+
+        while(true){
+            randRow = random.nextInt(max - min + 1) + min;
+            randCol = random.nextInt(max - min + 1) + min;
+            randOren = random.nextInt(2) + 0;
+
+            if(randOren == 1){
+                coorS = new Coordinate(randRow,randCol);
+                coorE = new Coordinate(randRow + shipLength,randCol);
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
+                    ship.setLocation(coorS,coorE);
+                    break;
+                }
+            }
+            else{
+                coorS = new Coordinate(randRow,randCol);
+                coorE = new Coordinate(randRow ,randCol + shipLength);
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
+                    ship.setLocation(coorS,coorE);
+                    break;
+                }
+            }
+        }
+    }
+
+    public BattleshipModel placeComputerShipsHard(){
+        placeShipRandomly(computer_aircraftCarrier);
+        placeShipRandomly(computer_battleship);
+        placeShipRandomly(computer_submarine);
+        placeShipRandomly(computer_clipper);
+        placeShipRandomly(computer_dinghy);
+
+        return this;
     }
 
     public BattleshipModel placeShip(String shipName, String row, String col, String orientation) {
