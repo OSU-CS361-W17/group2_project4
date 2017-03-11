@@ -24,12 +24,16 @@ public class BattleshipModel {
     public ArrayList<Coordinate> computerHits;
     public ArrayList<Coordinate> computerMisses;
     public Coordinate lastComputerShot;
+    public Coordinate currentComputerShot;
 
     boolean scanResult = false;
     // (͡°͜ʖ͡°)
     boolean hardMode = false;
     // (͡°͜ʖ͡°)
-/*    */
+    int fireMode = 0;
+
+
+/*
 /*            ╔══╗ Put this on your wall*/
 /*            ║╔╗║    if you love anime!*/
 /*            ║╚╝╠══╦╦══╦═╗*/
@@ -162,28 +166,46 @@ public class BattleshipModel {
         }
     }
 
+    public boolean inRange(int x, int y){
+        if(x < 10 && x > 1 && y < 10 && y > 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
-    public Coordinate shootAdditional(Coordinate coor){
-        if(playerMisses.contains(coor)){
 
-        }else if(){
+    public boolean validShot(Coordinate coor)
+    {
+        boolean shot = false;
+
+        if(inRange(coor.getAcross(), coor.getDown()) == false){
+            return false;
+        }else if(computerMisses.contains(coor)== true || computerHits.contains(coor) == true){
+            return false;
+        }else if(lastComputerShot == playerMisses.get(playerMisses.size() -1)){
+
+        }else if(true ){
+
+        }else if(true){
 
         }
-
+        return true;
     }
 
     public void shootAtPlayer() {
-       int randRow;
-       int randCol;
-       if(hardMode == true){
-           Coordinate lastHit = playerHits.get(playerHits.size() -1);
-           if(lastHit == lastComputerShot) {
-               randCol = lastHit.getAcross() + 1;
-               randRow = lastHit.getDown();
-           }else{
+       int randRow = 0;
+       int randCol = 0;
+       Coordinate coor = new Coordinate(randRow,randCol);
+
+        if(hardMode == true) {
+           if (playerMisses.get(playerMisses.size() - 1) == lastComputerShot) {
+               fireMode = 0;
+           } else if (playerHits.get(playerHits.size() - 1) == lastComputerShot) {
+               fireMode = 1;
+           } else if (coor) {
 
            }
-
        }
        else {
            int max = 10;
@@ -193,7 +215,6 @@ public class BattleshipModel {
            randCol = random.nextInt(max - min + 1) + min;
        }
 
-        Coordinate coor = new Coordinate(randRow,randCol);
         lastComputerShot = coor;
         playerShot(coor);
     }
@@ -235,6 +256,73 @@ public class BattleshipModel {
         else {
             playerMisses.add(coor);
         }
+    }
+
+    public void shootAtPlayer() {
+        int randRow = 0;
+        int randCol = 0;
+        Coordinate coor = new Coordinate(randRow,randCol);
+
+        if(hardMode == true) {
+            if (playerMisses.get(playerMisses.size() - 1) == lastComputerShot) {
+                fireMode = 0;
+            } else if (playerHits.get(playerHits.size() - 1) == lastComputerShot) {
+                fireMode = 1;
+            } else if (playerShotHit(coor) == true) {
+
+            }
+        }
+        else {
+            int max = 10;
+            int min = 1;
+            Random random = new Random();
+            randRow = random.nextInt(max - min + 1) + min;
+            randCol = random.nextInt(max - min + 1) + min;
+        }
+
+        lastComputerShot = coor;
+        playerShot(coor);
+    }
+
+    boolean playerShotHit(Coordinate coor) {
+        boolean validHit = false;
+        if(playerMisses.contains(coor)) {
+            System.out.println("Duplicate fire.");
+        }
+
+        if(aircraftCarrier.covers(coor)) {
+            validHit = true;
+        }
+        else if (battleship.covers(coor)) {
+            validHit = true
+        }
+        else if (submarine.covers(coor)) {
+            validHit = true;
+        }
+        else if (clipper.covers(coor)) {
+            int CoorStartRow = clipper.start.getAcross();
+            int CoorStartCol = clipper.start.getDown();
+
+            if(clipper.AxisPositioning() == 'V') {
+                for (int i = 0;i<3;i++) {
+                    Coordinate CivShipCoor = new Coordinate(CoorStartRow, CoorStartCol + i);
+                    validHit = true;
+                }
+            }
+            else {
+                for (int i = 0;i<3;i++) {
+                    Coordinate CivShipCoor = new Coordinate(CoorStartRow + i, CoorStartCol);
+                    validHit = true;
+                }
+            }
+        }
+        else if (dinghy.covers(coor)) {
+            validHit = true;
+        }
+        else {
+            validHit = false;
+        }
+        return validHit;
     }
 
     public void scan(int rowInt, int colInt) {
