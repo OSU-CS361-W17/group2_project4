@@ -8,11 +8,15 @@ public class Ship {
     protected int length;
     protected Coordinate start;
     protected Coordinate end;
+    protected boolean sunk;
+    protected int health;
     protected boolean stealth;
 
     public Ship(String n, int l, Coordinate s, Coordinate e, boolean st) {
         name = n;
         length = l;
+        health = l;
+        sunk = false;
         start = s;
         end = e;
         stealth = st;
@@ -74,5 +78,12 @@ public class Ship {
             return true;
         }
         return false;
+    }
+
+    public void TakeDamage(){
+        health--;
+        if(health == 0){
+            sunk = true;
+        }
     }
 }
