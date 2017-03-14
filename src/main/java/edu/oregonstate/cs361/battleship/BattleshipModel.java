@@ -29,23 +29,11 @@ public class BattleshipModel {
     public Coordinate currentTarget;
 
     boolean scanResult = false;
-    // (͡°͜ʖ͡°)
     boolean hardMode = false;
-    // (͡°͜ʖ͡°)
     int fireMode = 1;
     int direction = 1;
+    int directionCount = 1;
     int currentDirection = 1;
-/*
-/*            ╔══╗ Put this on your wall*/
-/*            ║╔╗║    if you love anime!*/
-/*            ║╚╝╠══╦╦══╦═╗*/
-/*            ║╔╗║╔╗║║║║║╩╣*/
-/*            ╚╝╚╩╝╚╩╩╩╩╩═╝*/
-        /*╔╦╦╦╗OMG */
-        /*╠╬╬╬╣CHOCOLATE!! */
-        /*╠╬╬╬╣Put this on your page */
-        /*╠╬╬╬╣If you LOVE */
-        /*╚╩╩╩╝♥ CHOCOLATE */
     public BattleshipModel() {
         playerHits = new ArrayList<>();
         playerMisses= new ArrayList<>();
@@ -262,9 +250,11 @@ public class BattleshipModel {
     {
         if(WithinBounds(coor) == false){
             return false;
-        }else if(playerHits.contains(coor)== true || playerMisses.contains(coor) == true){
+        }else if(playerHits.contains(coor)== true){
             return false;
-        }else{
+        }else if(playerMisses.contains(coor) == true){
+            return false;
+        }else {
             return true;
         }
     }
@@ -303,7 +293,6 @@ public class BattleshipModel {
             return coor;
         }
         else if(fireMode == 2){
-            coor = directionShot(random.nextInt(4-1 + 1) + 1 );
             while (validShot(coor) ==  false && direction < 5){
                 coor = directionShot(direction);
                 direction++;
