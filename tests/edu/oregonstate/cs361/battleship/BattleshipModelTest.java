@@ -223,4 +223,66 @@ class BattleshipModelTest {
         model.scan(1,1);
         assertEquals(true, model.getScanResult());
     }
+
+    @Test
+    void testsValidShot() {
+        BattleshipModel model = new BattleshipModel();
+        Coordinate coor = new Coordinate(0,0);
+        Coordinate coor1 = new Coordinate(0,1);
+        Coordinate coor2 = new Coordinate(11,11);
+        Coordinate coor3 = new Coordinate(5,5);
+        model.playerHits.add(coor);
+        model.playerMisses.add(coor1);
+        assertEquals(false, model.validShot(coor));
+        assertEquals(false, model.validShot(coor1));
+        assertEquals(false, model.validShot(coor2));
+        assertEquals(true, model.validShot(coor3));
+    }
+
+    @Test
+    void testsDirectionShot() {
+        BattleshipModel model = new BattleshipModel();
+        Coordinate coor = new Coordinate(1,1);
+        model.currentTarget = coor;
+        Coordinate coor1 = new Coordinate(1,0);
+        Coordinate coor2 = new Coordinate(1,2);
+        Coordinate coor3 = new Coordinate(0,1);
+        Coordinate coor4 = new Coordinate(2,1);
+
+        Coordinate mycoor = model.directionShot(1);
+        assertEquals(coor1.getDown(), mycoor.getDown());
+        model.currentTarget = coor;
+        mycoor = model.directionShot(2);
+        assertEquals(coor.getDown(), mycoor.getDown());
+        model.currentTarget = coor;
+        mycoor = model.directionShot(3);
+        assertEquals(coor3.getAcross(), mycoor.getAcross());
+        model.currentTarget = coor;
+        mycoor = model.directionShot(4);
+        assertEquals(coor1.getAcross(), mycoor.getAcross());
+
+
+    }
+
+    @Test
+    void testHardModeShot() {
+        BattleshipModel model = new BattleshipModel();
+        Coordinate coor = new Coordinate(1,1);
+        coor = model.hardModeShot(coor);
+        model.currentTarget = coor;
+        assertNotNull(coor);
+        model.fireMode = 2;
+        coor = model.hardModeShot(coor);
+        assertNotNull(coor);
+        model.fireMode = 3;
+        coor = model.hardModeShot(coor);
+        model.fireMode = 1;
+        assertNotNull(coor);
+        coor = model.hardModeShot(coor);
+        assertNotNull(coor);
+
+
+    }
+
+
 }
