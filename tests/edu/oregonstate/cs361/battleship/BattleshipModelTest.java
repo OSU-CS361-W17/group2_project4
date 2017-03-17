@@ -260,8 +260,6 @@ class BattleshipModelTest {
         model.currentTarget = coor;
         mycoor = model.directionShot(4);
         assertEquals(coor1.getAcross(), mycoor.getAcross());
-
-
     }
 
     @Test
