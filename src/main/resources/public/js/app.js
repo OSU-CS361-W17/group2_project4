@@ -20,6 +20,13 @@ function GameState_START(IsDonePlacingShip) {
     }
 }
 
+function hardMode(){
+    gameModel.hardMode = true;
+    alert("Hard Mode Enabled!");
+    $("#HardButton").addClass("hidden");
+    console.log("Hard Mode");
+}
+
 function CheckAllPlayerShipsPlaced() {
     var aircraftCarrier_placed = false;
     var battleship_placed = false;
@@ -220,6 +227,37 @@ function displayGameState(gameModel) {
         $( '#MyBoard #' + gameModel.playerHits[i].Across + '_' + gameModel.playerHits[i].Down ).css("background-color", "none");
         $( '#MyBoard #' + gameModel.playerHits[i].Across + '_' + gameModel.playerHits[i].Down ).css("background-image", "url('../images/hitPIC.png')");
     }
+
+        checkSunk(gameModel.aircraftCarrier);
+        checkSunk(gameModel.battleship);
+        checkSunk(gameModel.submarine);
+        checkSunk(gameModel.clipper);
+        checkSunk(gameModel.dinghy);
+}
+
+function checkSunk(ship){
+        if(ship.sunk == true){
+            startCoordAcross = ship.start.Across;
+            startCoordDown = ship.start.Down;
+            endCoordAcross = ship.end.Across;
+            endCoordDown = ship.end.Down;
+            if(startCoordAcross > 0) {
+
+                    if(startCoordAcross == endCoordAcross) {
+                        for (i = startCoordDown; i <= endCoordDown; i++) {
+                            $( '#MyBoard #'+startCoordAcross+'_'+i  ).css("background-color", "none");
+                            $( '#MyBoard #'+startCoordAcross+'_'+i  ).css("background-image", "url('../images/waterPIC.png')");
+                        }
+                    }
+
+                    else {
+                        for (i = startCoordAcross; i <= endCoordAcross; i++) {
+                            $( '#MyBoard #'+i+'_'+startCoordDown  ).css("background-color", "none");
+                            $( '#MyBoard #'+i+'_'+startCoordDown  ).css("background-image", "url('../images/waterPIC.png')");
+                        }
+                    }
+                }
+        }
 }
 
 function displayShip(ship) {

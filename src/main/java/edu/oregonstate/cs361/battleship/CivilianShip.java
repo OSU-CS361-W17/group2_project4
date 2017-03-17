@@ -19,4 +19,6 @@ public class CivilianShip extends Ship{
             return 'V';
         }
     }
+
+
 }
