@@ -130,6 +130,8 @@ function placeShip() {
             dataType: "json"
         });
 
+        removeShip();
+
         request.done(function( currModel ) {
             displayGameState(currModel);
             gameModel = currModel;
@@ -165,6 +167,12 @@ function fire() {
     request.fail(function( jqXHR, textStatus ) {
         alert( "Request failed: " + textStatus );
     });
+}
+
+function removeShip()
+{
+    var x=document.getElementById("shipSelec");
+    x.remove(x.selectedIndex);
 }
 
 function scan() {

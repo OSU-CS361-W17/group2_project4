@@ -9,17 +9,17 @@ import java.util.Random;
  * Created by michaelhilton on 1/4/17.
  */
 public class BattleshipModel {
-    private Ship aircraftCarrier = new Ship("AircraftCarrier",5, new Coordinate(0,0),new Coordinate(0,0),false);
-    private Ship battleship = new Ship("Battleship",4, new Coordinate(0,0),new Coordinate(0,0),true);
-    private Ship submarine = new Ship("Submarine",3, new Coordinate(0,0),new Coordinate(0,0),true);
-    private  CivilianShip clipper = new CivilianShip("Clipper", 3, new Coordinate(0,0), new Coordinate(0,0),false);
-    private  CivilianShip dinghy = new CivilianShip("Dinghy", 1, new Coordinate(0,0), new Coordinate(0,0),false);
+    private Ship aircraftCarrier = new Ship("AircraftCarrier",5, new Coordinate(0,0),new Coordinate(0,0));
+    private MilitaryShip battleship = new MilitaryShip("Battleship",4, new Coordinate(0,0),new Coordinate(0,0),true);
+    private MilitaryShip submarine = new MilitaryShip("Submarine",3, new Coordinate(0,0),new Coordinate(0,0),true);
+    private  CivilianShip clipper = new CivilianShip("Clipper", 3, new Coordinate(0,0), new Coordinate(0,0));
+    private  CivilianShip dinghy = new CivilianShip("Dinghy", 1, new Coordinate(0,0), new Coordinate(0,0));
 
-    public Ship computer_aircraftCarrier = new Ship("Computer_AircraftCarrier",5, new Coordinate(2,2),new Coordinate(2,6),false);
-    public Ship computer_battleship = new Ship("Computer_Battleship",4, new Coordinate(2,8),new Coordinate(5,8),true);
-    public Ship computer_submarine = new Ship("Computer_Submarine",3, new Coordinate(9,6),new Coordinate(9,8),true);
-    public  CivilianShip computer_clipper = new CivilianShip("Computer_Clipper", 3, new Coordinate(1,10), new Coordinate(3,10),false);
-    public CivilianShip computer_dinghy = new CivilianShip("Computer_Dinghy", 1, new Coordinate(1,1), new Coordinate(1,1),false);
+    public Ship computer_aircraftCarrier = new Ship("Computer_AircraftCarrier",5, new Coordinate(2,2),new Coordinate(2,6));
+    public MilitaryShip computer_battleship = new MilitaryShip("Computer_Battleship",4, new Coordinate(2,8),new Coordinate(5,8),true);
+    public MilitaryShip computer_submarine = new MilitaryShip("Computer_Submarine",3, new Coordinate(9,6),new Coordinate(9,8),true);
+    public  CivilianShip computer_clipper = new CivilianShip("Computer_Clipper", 3, new Coordinate(1,10), new Coordinate(3,10));
+    public CivilianShip computer_dinghy = new CivilianShip("Computer_Dinghy", 1, new Coordinate(1,1), new Coordinate(1,1));
 
     public ArrayList<Coordinate> playerHits;
     public ArrayList<Coordinate> playerMisses;
@@ -29,23 +29,11 @@ public class BattleshipModel {
     public Coordinate currentTarget;
 
     boolean scanResult = false;
-    // (͡°͜ʖ͡°)
     boolean hardMode = false;
-    // (͡°͜ʖ͡°)
     int fireMode = 1;
-    int direction = 1;
+    int direction = 0;
+    int directionCount = 0;
     int currentDirection = 1;
-/*
-/*            ╔══╗ Put this on your wall*/
-/*            ║╔╗║    if you love anime!*/
-/*            ║╚╝╠══╦╦══╦═╗*/
-/*            ║╔╗║╔╗║║║║║╩╣*/
-/*            ╚╝╚╩╝╚╩╩╩╩╩═╝*/
-        /*╔╦╦╦╗OMG */
-        /*╠╬╬╬╣CHOCOLATE!! */
-        /*╠╬╬╬╣Put this on your page */
-        /*╠╬╬╬╣If you LOVE */
-        /*╚╩╩╩╝♥ CHOCOLATE */
     public BattleshipModel() {
         playerHits = new ArrayList<>();
         playerMisses= new ArrayList<>();
@@ -262,26 +250,29 @@ public class BattleshipModel {
     {
         if(WithinBounds(coor) == false){
             return false;
-        }else if(playerHits.contains(coor)== true || playerMisses.contains(coor) == true){
+        }else if(playerHits.contains(coor)== true){
             return false;
-        }else{
+        }else if(playerMisses.contains(coor) == true){
+            return false;
+        }else {
             return true;
         }
     }
 
     public Coordinate directionShot(int fireDirection){
-        if(fireDirection == 1){
+        if(fireDirection == 0){
             //up
             currentTarget.setDown(currentTarget.getDown() - 1);
+        }else if(fireDirection == 1){
+            //right
+            currentTarget.setAcross(currentTarget.getAcross() + 1);
+
         }else if(fireDirection == 2){
             //down
             currentTarget.setDown(currentTarget.getDown() + 1);
         }else if(fireDirection == 3){
             //left
             currentTarget.setAcross(currentTarget.getAcross() - 1);
-        }else if(fireDirection == 4){
-            //right
-            currentTarget.setAcross(currentTarget.getAcross() + 1);
         }
         return currentTarget;
     }
@@ -292,6 +283,7 @@ public class BattleshipModel {
     public Coordinate hardModeShot(Coordinate coor){
         Random random = new Random();
         if(fireMode == 1){
+            //random fire until hit then go to firemode 2
             while(validShot(coor) == false) {
                 coor.setAcross(random.nextInt(10 - 1 + 1) + 1);
                 coor.setDown(random.nextInt(10 - 1 + 1) + 1);
@@ -303,34 +295,73 @@ public class BattleshipModel {
             return coor;
         }
         else if(fireMode == 2){
-            coor = directionShot(random.nextInt(4-1 + 1) + 1 );
-            while (validShot(coor) ==  false && direction < 5){
+            //scan for shots around initial hit
+            while (validShot(coor) ==  false && direction < 4){
+                //pick direction from initial hit
                 coor = directionShot(direction);
                 direction++;
             }
-            if(direction == 5){
+            if(direction == 4){
                 fireMode = 1;
                 direction = 1;
-            }else{
+            }else if(!playerShotHit(coor) && !playerShotSunk(coor) && direction != 5){
+                //if not a hit or not sunk pick a new direction
+                direction++;
+            }else if(playerShotHit(coor)){
+                //if shot is a hit go to firemode 3 and fire in one direction
                 currentDirection = direction;
                 fireMode = 3;
             }
             return coor;
         }
         else if(fireMode == 3){
+            //fire in one direction
             coor = directionShot(currentDirection);
-            if(validShot(coor) == false){
-                while(validShot(coor) == false){
-                    coor.setAcross(random.nextInt(10 - 1 + 1) + 1);
-                    coor.setDown(random.nextInt(10 - 1 + 1) + 1);
+            if(validShot(coor) == true && !playerShotSunk(coor)){
+                directionCount = 0;
+                if(playerShotSunk(coor)){
+                    fireMode = 1;
                 }
-                fireMode = 1;
+                return coor;
             }
-            if(playerShotHit(coor) == false){
-                fireMode = 1;
+            else{
+                //if reached the end of a ship try flipping direction and firing on the other side
+                if(directionCount == 0){
+                    directionCount++;
+                    //flip firing direction
+                    currentDirection = (currentDirection + 2) % 4;
+                    coor = directionShot(currentDirection);
+                    while(directionScan(coor) == 1) {
+                        //move in new direction until reach a miss/bounds or an empty space
+                        coor = directionShot(currentDirection);
+                    }
+                    if(directionScan(coor) == 0){
+                        //miss or outof bounds return to firemode 1
+                        fireMode = 1;
+                        while(!validShot(coor)) {
+                            coor.setAcross(random.nextInt(10 - 1 + 1) + 1);
+                            coor.setDown(random.nextInt(10 - 1 + 1) + 1);
+                        }
+                        return coor;
+                    }
+                    else if(directionScan(coor) == 2){
+                        //fire on empty space stay in firemode 3
+                        return coor;
+                    }
+                }
             }
         }
         return coor;
+    }
+
+    int directionScan(Coordinate coor){
+       if(playerMisses.contains(coor) || !WithinBounds(coor)) {
+           return 0;
+       }else if(playerHits.contains(coor)){
+           return 1;
+       }else{
+           return 2;
+       }
     }
 
     public void shootAtPlayer() {
@@ -411,6 +442,33 @@ public class BattleshipModel {
         return validHit;
     }
 
+    boolean playerShotSunk(Coordinate coor) {
+        boolean validHit = false;
+        if(playerMisses.contains(coor)) {
+            System.out.println("Duplicate fire.");
+        }
+
+        if(aircraftCarrier.covers(coor) && aircraftCarrier.sunk == true) {
+            validHit = true;
+        }
+        else if (battleship.covers(coor) && battleship.sunk == true) {
+            validHit = true;
+        }
+        else if (submarine.covers(coor) && submarine.sunk == true) {
+            validHit = true;
+        }
+        else if (clipper.covers(coor) && clipper.sunk == true) {
+            validHit = true;
+        }
+        else if (dinghy.covers(coor) && dinghy.sunk == true) {
+            validHit = true;
+        }
+        else {
+            validHit = false;
+        }
+        return validHit;
+    }
+
     public void scan(int rowInt, int colInt) {
         Coordinate coor = new Coordinate(rowInt,colInt);
         scanResult = false;
@@ -433,6 +491,8 @@ public class BattleshipModel {
             scanResult = false;
         }
     }
+
+
 
     public int getPlayerHits() {
         return playerHits.size();
