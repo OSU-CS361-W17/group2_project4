@@ -26,31 +26,30 @@ public class Ship {
         start = s;
         end = e;
     }
-
+    /*This method checks if the passed in coordinate is covered by the ship it is invoked on*/
     public boolean covers(Coordinate test) {
-        //horizontal
-        if(start.getAcross() == end.getAcross()){
-            if(test.getAcross() == start.getAcross()){
-                if((test.getDown() >= start.getDown()) &&
-                (test.getDown() <= end.getDown()))
+        //vertical
+        if((start.getAcross() == end.getAcross())&&
+                (test.getAcross() == start.getAcross()))
+        {
+            if((test.getDown() >= start.getDown()) && (test.getDown() <= end.getDown()))
                 return true;
-            }
-            else {
-                return false;
+
+            else{
+            return false;
             }
         }
-        //vertical
+        //horizontal
         else{
             if(test.getDown() == start.getDown()){
                 if((test.getAcross() >= start.getAcross()) &&
                         (test.getAcross() <= end.getAcross()))
-                    return true;
+                        return true;
             }
             else {
                 return false;
             }
-
-        }
+            }
         return false;
     }
 
