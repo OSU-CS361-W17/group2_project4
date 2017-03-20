@@ -10,7 +10,6 @@ public class Ship {
     protected Coordinate end;
     protected boolean sunk;
     protected int health;
-    protected boolean stealth;
     protected boolean placed;
 
     public Ship(String n, int l, Coordinate s, Coordinate e) {
@@ -56,28 +55,6 @@ public class Ship {
 
     public String getName() {
         return name;
-    }
-
-    public boolean scan(Coordinate coor) {
-        if(stealth) {
-            return false;
-        }
-        if(covers(coor)){
-            return true;
-        }
-        if(covers(new Coordinate(coor.getAcross()-1,coor.getDown()))){
-            return true;
-        }
-        if(covers(new Coordinate(coor.getAcross()+1,coor.getDown()))){
-            return true;
-        }
-        if(covers(new Coordinate(coor.getAcross(),coor.getDown()-1))){
-            return true;
-        }
-        if(covers(new Coordinate(coor.getAcross(),coor.getDown()+1))){
-            return true;
-        }
-        return false;
     }
 
     public void TakeDamage(){

@@ -20,5 +20,22 @@ public class CivilianShip extends Ship{
         }
     }
 
-
+    public boolean scan(Coordinate coor) {
+        if(covers(coor)){
+            return true;
+        }
+        if(covers(new Coordinate(coor.getAcross()-1,coor.getDown()))){
+            return true;
+        }
+        if(covers(new Coordinate(coor.getAcross()+1,coor.getDown()))){
+            return true;
+        }
+        if(covers(new Coordinate(coor.getAcross(),coor.getDown()-1))){
+            return true;
+        }
+        if(covers(new Coordinate(coor.getAcross(),coor.getDown()+1))){
+            return true;
+        }
+        return false;
+    }
 }
