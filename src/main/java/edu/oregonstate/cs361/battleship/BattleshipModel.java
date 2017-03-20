@@ -5,20 +5,17 @@ import sun.plugin.dom.core.CoreConstants;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by michaelhilton on 1/4/17.
- */
 public class BattleshipModel {
-    private Ship aircraftCarrier = new Ship("AircraftCarrier",5, new Coordinate(0,0),new Coordinate(0,0));
+    private MilitaryShip aircraftCarrier = new MilitaryShip("AircraftCarrier",5, new Coordinate(0,0),new Coordinate(0,0), false);
     private MilitaryShip battleship = new MilitaryShip("Battleship",4, new Coordinate(0,0),new Coordinate(0,0),true);
     private MilitaryShip submarine = new MilitaryShip("Submarine",3, new Coordinate(0,0),new Coordinate(0,0),true);
-    private  CivilianShip clipper = new CivilianShip("Clipper", 3, new Coordinate(0,0), new Coordinate(0,0));
-    private  CivilianShip dinghy = new CivilianShip("Dinghy", 1, new Coordinate(0,0), new Coordinate(0,0));
+    private CivilianShip clipper = new CivilianShip("Clipper", 3, new Coordinate(0,0), new Coordinate(0,0));
+    private CivilianShip dinghy = new CivilianShip("Dinghy", 1, new Coordinate(0,0), new Coordinate(0,0));
 
-    public Ship computer_aircraftCarrier = new Ship("Computer_AircraftCarrier",5, new Coordinate(2,2),new Coordinate(2,6));
+    public MilitaryShip computer_aircraftCarrier = new MilitaryShip("Computer_AircraftCarrier",5, new Coordinate(2,2),new Coordinate(2,6), false);
     public MilitaryShip computer_battleship = new MilitaryShip("Computer_Battleship",4, new Coordinate(2,8),new Coordinate(5,8),true);
     public MilitaryShip computer_submarine = new MilitaryShip("Computer_Submarine",3, new Coordinate(9,6),new Coordinate(9,8),true);
-    public  CivilianShip computer_clipper = new CivilianShip("Computer_Clipper", 3, new Coordinate(1,10), new Coordinate(3,10));
+    public CivilianShip computer_clipper = new CivilianShip("Computer_Clipper", 3, new Coordinate(1,10), new Coordinate(3,10));
     public CivilianShip computer_dinghy = new CivilianShip("Computer_Dinghy", 1, new Coordinate(1,1), new Coordinate(1,1));
 
     public ArrayList<Coordinate> playerHits;
@@ -28,11 +25,20 @@ public class BattleshipModel {
     public Coordinate lastComputerShot;
     public Coordinate currentTarget;
 
+    public static final int RANDOM_FIRING = 1;
+    public static final int ADJACENT_FIRING = 2;
+    public static final int LINE_FIRING = 3;
+
+    public static final int UP = 0;
+    public static final int RIGHT = 1;
+    public static final int DOWN = 2;
+    public static final int LEFT = 3;
+
     boolean scanResult = false;
     boolean hardMode = false;
-    int fireMode = 1;
-    int direction = 0;
-    int directionCount = 0;
+    boolean hasFlipped = false;
+    int fireMode = RANDOM_FIRING;
+    int direction = UP;
     int currentDirection = 1;
     public BattleshipModel() {
         playerHits = new ArrayList<>();
@@ -318,7 +324,7 @@ public class BattleshipModel {
             //fire in one direction
             coor = directionShot(currentDirection);
             if(validShot(coor) == true && !playerShotSunk(coor)){
-                directionCount = 0;
+                hasFlipped = false;
                 if(playerShotSunk(coor)){
                     fireMode = 1;
                 }
@@ -326,8 +332,8 @@ public class BattleshipModel {
             }
             else{
                 //if reached the end of a ship try flipping direction and firing on the other side
-                if(directionCount == 0){
-                    directionCount++;
+                if(!hasFlipped){
+                    hasFlipped = true;
                     //flip firing direction
                     currentDirection = (currentDirection + 2) % 4;
                     coor = directionShot(currentDirection);
