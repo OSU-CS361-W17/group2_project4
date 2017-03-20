@@ -12,15 +12,6 @@ public class Ship {
     protected int health;
     protected boolean placed;
 
-    public Ship(String n, int l, Coordinate s, Coordinate e) {
-        name = n;
-        length = l;
-        health = l;
-        sunk = false;
-        start = s;
-        end = e;
-    }
-
     public void setLocation(Coordinate s, Coordinate e) {
         start = s;
         end = e;

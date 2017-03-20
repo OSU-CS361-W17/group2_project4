@@ -5,9 +5,13 @@ package edu.oregonstate.cs361.battleship;
  */
 public class CivilianShip extends Ship{
 
-    CivilianShip(String n, int l, Coordinate s, Coordinate e)
-    {
-        super(n, l, s, e);
+    CivilianShip(String n, int l, Coordinate s, Coordinate e) {
+        name = n;
+        length = l;
+        sunk = false;
+        start = s;
+        end = e;
+        health = 1;
     }
 
     public char AxisPositioning()

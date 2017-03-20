@@ -263,10 +263,10 @@ public class BattleshipModel {
         if(WithinBounds(coor) == false) {
             return false;
         }
-        else if(playerHits.contains(coor)== true) {
+        else if(playerHitsHas(coor)== true) {
             return false;
         }
-        else if(playerMisses.contains(coor) == true) {
+        else if(playerMissesHas(coor) == true) {
             return false;
         }
         else {
@@ -365,9 +365,9 @@ public class BattleshipModel {
                 System.out.println("Firing at: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
                 return coor;
             }
-            else if(playerHits.contains(coor)) {
+            else if(playerHitsHas(coor)) {
                 System.out.println("Line Firing: invalid fire location: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " is a hit");
-                while(playerHits.contains(coor)) {
+                while(playerHitsHas(coor)) {
                     coor = directionShot(currentDirection, coor);
                     System.out.println("Line Firing: Scanning past a hit. New fire location: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
                 }
@@ -455,11 +455,11 @@ public class BattleshipModel {
 
     int directionScan(Coordinate coor){
         System.out.println("Scanning coordinate: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
-        if(playerMisses.contains(coor) || !WithinBounds(coor)) {
+        if(playerMissesHas(coor) || !WithinBounds(coor)) {
             System.out.println("Returning CANT_FIRE");
             return CANT_FIRE;
         }
-        else if(playerHits.contains(coor)) {
+        else if(playerHitsHas(coor)) {
             System.out.println("Returning KEEP_SCANNING");
             return KEEP_SCANNING;
         }
@@ -467,6 +467,24 @@ public class BattleshipModel {
             System.out.println("Returning CAN_FIRE");
             return CAN_FIRE;
         }
+    }
+
+    public boolean playerHitsHas(Coordinate coor) {
+        for (int i = 0; i < playerHits.size(); i++) {
+            if((playerHits.get(i).getAcross() == coor.getAcross()) && (playerHits.get(i).getDown() == coor.getDown())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean playerMissesHas(Coordinate coor) {
+        for (int i = 0; i < playerHits.size(); i++) {
+            if((playerMisses.get(i).getAcross() == coor.getAcross()) && (playerMisses.get(i).getDown() == coor.getDown())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void shootAtPlayer() {
@@ -489,40 +507,46 @@ public class BattleshipModel {
     }
 
     void playerShot(Coordinate coor) {
-        if(playerMisses.contains(coor)) {
+        if(playerMissesHas(coor)) {
             System.out.println("Duplicate fire.");
         }
 
         if(aircraftCarrier.covers(coor) && aircraftCarrier.sunk == false) {
             aircraftCarrier.TakeDamage();
+            System.out.println(coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " added to hits list.");
             playerHits.add(coor);
         }
         else if (battleship.covers(coor) && battleship.sunk == false) {
             battleship.TakeDamage();
+            System.out.println(coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " added to hits list.");
             playerHits.add(coor);
         }
         else if (submarine.covers(coor) && submarine.sunk == false) {
             submarine.TakeDamage();
+            System.out.println(coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " added to hits list.");
             playerHits.add(coor);
         }
         else if (clipper.covers(coor) && clipper.sunk == false) {
             clipper.TakeDamage();
+            System.out.println(coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " added to hits list.");
             clipper.sunk = true;
             playerHits.add(coor);
         }
         else if (dinghy.covers(coor) && dinghy.sunk == false) {
+            System.out.println(coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " added to hits list.");
             dinghy.TakeDamage();
             dinghy.sunk = true;
             playerHits.add(coor);
         }
         else {
+            System.out.println(coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " added to misses list.");
             playerMisses.add(coor);
         }
     }
 
     boolean playerShotHit(Coordinate coor) {
         boolean validHit = false;
-        if(playerMisses.contains(coor)) {
+        if(playerMissesHas(coor)) {
             System.out.println("Duplicate fire.");
         }
 
@@ -548,7 +572,7 @@ public class BattleshipModel {
     }
 
     boolean playerShotSunk(Coordinate coor) {
-        if(playerMisses.contains(coor)) {
+        if(playerMissesHas(coor)) {
             System.out.println("Duplicate fire.");
         }
         if(aircraftCarrier.covers(coor) && aircraftCarrier.health == 1) {
