@@ -1,11 +1,11 @@
 package edu.oregonstate.cs361.battleship;
 
 /**
- * Created by josep on 2/23/2017.
+ * Created by josep on 3/16/2017.
  */
-public class CivilianShip extends Ship{
+public class MilitaryShip extends Ship{
 
-    CivilianShip(String n, int l, Coordinate s, Coordinate e)
+    MilitaryShip(String n, int l, Coordinate s, Coordinate e, boolean st)
     {
         super(n, l, s, e);
     }

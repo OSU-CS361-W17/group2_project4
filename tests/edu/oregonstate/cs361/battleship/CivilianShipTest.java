@@ -11,8 +11,8 @@ class CivilianShipTest {
     @Test
     void AxisPositioning()
     {
-        CivilianShip ModelHorizontal = new CivilianShip("TEST1", 3, new Coordinate(1,10), new Coordinate(3,10), false);
-        CivilianShip ModelVertical = new CivilianShip("TEST2", 1, new Coordinate(10,1), new Coordinate(10,3), false);
+        CivilianShip ModelHorizontal = new CivilianShip("TEST1", 3, new Coordinate(1,10), new Coordinate(3,10));
+        CivilianShip ModelVertical = new CivilianShip("TEST2", 1, new Coordinate(10,1), new Coordinate(10,3));
 
         assertEquals('H',ModelHorizontal.AxisPositioning());
         assertEquals('V',ModelVertical.AxisPositioning());

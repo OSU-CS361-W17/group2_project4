@@ -11,15 +11,15 @@ public class Ship {
     protected boolean sunk;
     protected int health;
     protected boolean stealth;
+    protected boolean placed;
 
-    public Ship(String n, int l, Coordinate s, Coordinate e, boolean st) {
+    public Ship(String n, int l, Coordinate s, Coordinate e) {
         name = n;
         length = l;
         health = l;
         sunk = false;
         start = s;
         end = e;
-        stealth = st;
     }
 
     public void setLocation(Coordinate s, Coordinate e) {
