@@ -433,6 +433,10 @@ public class BattleshipModel {
             fireMode = LINE_FIRING;
             lineTarget = coor;
         }
+
+        if(coor == null){
+            coor = new Coordinate(0,0);
+        }
         System.out.println("Firing at: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
         return coor;
     }
