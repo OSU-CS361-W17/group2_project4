@@ -236,11 +236,11 @@ function displayGameState(gameModel) {
         $( '#MyBoard #' + gameModel.playerHits[i].Across + '_' + gameModel.playerHits[i].Down ).css("background-image", "url('../images/hitPIC.png')");
     }
 
-        checkSunk(gameModel.aircraftCarrier);
-        checkSunk(gameModel.battleship);
-        checkSunk(gameModel.submarine);
-        checkSunk(gameModel.clipper);
-        checkSunk(gameModel.dinghy);
+    checkSunk(gameModel.aircraftCarrier);
+    checkSunk(gameModel.battleship);
+    checkSunk(gameModel.submarine);
+    checkSunk(gameModel.clipper);
+    checkSunk(gameModel.dinghy);
 }
 
 function checkSunk(ship){

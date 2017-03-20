@@ -5,9 +5,13 @@ package edu.oregonstate.cs361.battleship;
  */
 public class CivilianShip extends Ship{
 
-    CivilianShip(String n, int l, Coordinate s, Coordinate e)
-    {
-        super(n, l, s, e);
+    CivilianShip(String n, int l, Coordinate s, Coordinate e) {
+        name = n;
+        length = l;
+        sunk = false;
+        start = s;
+        end = e;
+        health = 1;
     }
 
     public char AxisPositioning()
@@ -20,5 +24,22 @@ public class CivilianShip extends Ship{
         }
     }
 
-
+    public boolean scan(Coordinate coor) {
+        if(covers(coor)){
+            return true;
+        }
+        if(covers(new Coordinate(coor.getAcross()-1,coor.getDown()))){
+            return true;
+        }
+        if(covers(new Coordinate(coor.getAcross()+1,coor.getDown()))){
+            return true;
+        }
+        if(covers(new Coordinate(coor.getAcross(),coor.getDown()-1))){
+            return true;
+        }
+        if(covers(new Coordinate(coor.getAcross(),coor.getDown()+1))){
+            return true;
+        }
+        return false;
+    }
 }

@@ -1,7 +1,5 @@
 package edu.oregonstate.cs361.battleship;
 
-import sun.plugin.dom.core.CoreConstants;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -22,30 +20,39 @@ public class BattleshipModel {
     public ArrayList<Coordinate> playerMisses;
     public ArrayList<Coordinate> computerHits;
     public ArrayList<Coordinate> computerMisses;
-    public Coordinate lastComputerShot;
-    public Coordinate currentTarget;
+    public Coordinate lineTarget;
+    public Coordinate adjacentTarget;
+    public Coordinate scanTarget;
 
     public static final int RANDOM_FIRING = 1;
     public static final int ADJACENT_FIRING = 2;
     public static final int LINE_FIRING = 3;
+    public static final int LINE_FIRING_2 = 4;
 
     public static final int UP = 0;
     public static final int RIGHT = 1;
     public static final int DOWN = 2;
     public static final int LEFT = 3;
 
+    public static final int CANT_FIRE = 0;
+    public static final int KEEP_SCANNING = 1;
+    public static final int CAN_FIRE = 2;
+
     boolean scanResult = false;
     boolean hardMode = false;
     boolean hasFlipped = false;
     int fireMode = RANDOM_FIRING;
     int direction = UP;
-    int currentDirection = 1;
+    int currentDirection = UP;
+
     public BattleshipModel() {
         playerHits = new ArrayList<>();
-        playerMisses= new ArrayList<>();
+        playerMisses = new ArrayList<>();
         computerHits = new ArrayList<>();
-        computerMisses= new ArrayList<>();
+        computerMisses = new ArrayList<>();
     }
+
+    Random random = new Random();
 
     public Ship getShip(String shipName) {
         if (shipName.equalsIgnoreCase("aircraftcarrier")) {
@@ -115,13 +122,13 @@ public class BattleshipModel {
     }
 
     public boolean WithinBounds(Coordinate coor){
-        int max = 11;
-        int min = 0;
+        int max = 10;
+        int min = 1;
 
-        if(coor.getAcross() < max && coor.getAcross() > min && coor.getDown() < max && coor.getDown() > min){
+        if(coor.getAcross() <= max && coor.getAcross() >= min && coor.getDown() <= max && coor.getDown() >= min) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
@@ -252,179 +259,294 @@ public class BattleshipModel {
         }
     }
 
-     public boolean validShot(Coordinate coor)
-    {
-        if(WithinBounds(coor) == false){
+     public boolean validShot(Coordinate coor) {
+        if(WithinBounds(coor) == false) {
             return false;
-        }else if(playerHits.contains(coor)== true){
+        }
+        else if(playerHitsHas(coor)== true) {
             return false;
-        }else if(playerMisses.contains(coor) == true){
+        }
+        else if(playerMissesHas(coor) == true) {
             return false;
-        }else {
+        }
+        else {
             return true;
         }
     }
 
-    public Coordinate directionShot(int fireDirection){
-        if(fireDirection == 0){
-            //up
-            currentTarget.setDown(currentTarget.getDown() - 1);
-        }else if(fireDirection == 1){
-            //right
-            currentTarget.setAcross(currentTarget.getAcross() + 1);
-
-        }else if(fireDirection == 2){
-            //down
-            currentTarget.setDown(currentTarget.getDown() + 1);
-        }else if(fireDirection == 3){
-            //left
-            currentTarget.setAcross(currentTarget.getAcross() - 1);
+    public Coordinate directionShot(int fireDirection, Coordinate target) {
+        Coordinate c = new Coordinate(0,0);
+        if(fireDirection == UP) {
+            c.setAcross(target.getAcross());
+            c.setDown(target.getDown() - 1);
         }
-        return currentTarget;
+        else if(fireDirection == RIGHT) {
+            c.setAcross(target.getAcross() + 1);
+            c.setDown(target.getDown());
+        }
+        else if(fireDirection == DOWN) {
+            c.setAcross(target.getAcross());
+            c.setDown(target.getDown() + 1);
+        }
+        else if(fireDirection == LEFT) {
+            c.setAcross(target.getAcross() - 1);
+            c.setDown(target.getDown());
+        }
+        return c;
     }
 
-
-
-
-    public Coordinate hardModeShot(Coordinate coor){
-        Random random = new Random();
-        if(fireMode == 1){
-            //random fire until hit then go to firemode 2
-            while(validShot(coor) == false) {
-                coor.setAcross(random.nextInt(10 - 1 + 1) + 1);
-                coor.setDown(random.nextInt(10 - 1 + 1) + 1);
-            }
-            if(playerShotHit(coor) == true) {
-                fireMode = 2;
-                currentTarget = coor;
-            }
-            return coor;
+    public Coordinate hardModeShot(Coordinate coor) {
+        int numDirections = 4;
+        if(fireMode == RANDOM_FIRING) {
+            //random fire until hit then go to adjacent firing
+            System.out.println("Random Firing");
+            return randFire(coor);
         }
-        else if(fireMode == 2){
+        else if(fireMode == ADJACENT_FIRING){
             //scan for shots around initial hit
-            while (validShot(coor) ==  false && direction < 4){
+            coor = directionShot(direction, adjacentTarget);
+            System.out.println("Adjacent Firing: Current Direction: " + direction);
+            direction++;
+            while (!validShot(coor) && direction < numDirections) {
                 //pick direction from initial hit
-                coor = directionShot(direction);
+                coor = directionShot(direction, adjacentTarget);
+                System.out.println("Adjacent Firing: Previous Direction Invalid. New Direction: " + direction);
                 direction++;
             }
-            if(direction == 4){
-                fireMode = 1;
-                direction = 1;
-            }else if(!playerShotHit(coor) && !playerShotSunk(coor) && direction != 5){
-                //if not a hit or not sunk pick a new direction
-                direction++;
-            }else if(playerShotHit(coor)){
-                //if shot is a hit go to firemode 3 and fire in one direction
-                currentDirection = direction;
-                fireMode = 3;
+            if(!playerShotHit(coor) && !playerShotSunk(coor) && direction != numDirections) {
+                //if not a hit or not sunk pick a new direction (done automatically in while loop)
+                System.out.println("Adjacent Firing: valid direction but not hit or sink.");
             }
+            else if(playerShotSunk(coor) && direction != numDirections) {
+                //if sunk, return to random firing after this shot
+                fireMode = RANDOM_FIRING;
+                System.out.println("Adjacent Firing: Ship sunk. Now entering Random Firing Mode.");
+            }
+            else if(playerShotHit(coor) && direction != numDirections) {
+                //if shot is a hit go to line firing mode
+                fireMode = LINE_FIRING;
+                System.out.println("Adjacent Firing: Hit. Now entering Line Firing mode.");
+                currentDirection = direction - 1;
+                lineTarget = coor;
+                hasFlipped = false;
+            }
+            else {
+                //if all adjacent directions are exhausted, fire randomly
+                fireMode = RANDOM_FIRING;
+                System.out.println("Adjacent Firing: All directions exhausted, firing randomly.");
+                coor = randFire(coor);
+            }
+            System.out.println("Firing at: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
             return coor;
         }
-        else if(fireMode == 3){
+        else if(fireMode == LINE_FIRING) {
             //fire in one direction
-            coor = directionShot(currentDirection);
-            if(validShot(coor) == true && !playerShotSunk(coor)){
-                hasFlipped = false;
-                if(playerShotSunk(coor)){
-                    fireMode = 1;
+            coor = directionShot(currentDirection, lineTarget);
+            System.out.println("Line Firing: current direction: " + currentDirection);
+            if(validShot(coor)) {
+                if(playerShotSunk(coor)) {
+                    fireMode = RANDOM_FIRING;
+                    System.out.println("Line Firing: Ship Sunk. Entering Random Firing Mode.");
                 }
+                else if(playerShotHit(coor)) {
+                    System.out.println("Line Firing: Hit. Continuing Line Firing Mode.");
+                    lineTarget = coor;
+                }
+                else {
+                    if(!hasFlipped) {
+                        System.out.println("Line Firing: Miss and haven't flipped. Will try firing in other direction.");
+                        fireMode = LINE_FIRING_2;
+                    }
+                    else {
+                        System.out.println("Line Firing: Miss and have already flipped. Entering Random Firing Mode.");
+                        fireMode = RANDOM_FIRING;
+                    }
+                }
+                System.out.println("Firing at: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
                 return coor;
             }
-            else{
-                //if reached the end of a ship try flipping direction and firing on the other side
-                if(!hasFlipped){
-                    hasFlipped = true;
-                    //flip firing direction
-                    currentDirection = (currentDirection + 2) % 4;
-                    coor = directionShot(currentDirection);
-                    while(directionScan(coor) == 1) {
-                        //move in new direction until reach a miss/bounds or an empty space
-                        coor = directionShot(currentDirection);
+            else if(playerHitsHas(coor)) {
+                System.out.println("Line Firing: invalid fire location: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " is a hit");
+                while(playerHitsHas(coor)) {
+                    coor = directionShot(currentDirection, coor);
+                    System.out.println("Line Firing: Scanning past a hit. New fire location: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
+                }
+                if(validShot(coor)) {
+                    System.out.println("Line Firing: fire location now valid.");
+                    lineTarget = coor;
+                    System.out.println("Firing at: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
+                    return coor;
+                }
+                else {
+                    if(!hasFlipped) {
+                        System.out.println("Line Firing: reached a miss or out of bounds. Now scanning in other direction.");
+                        return flip(coor);
                     }
-                    if(directionScan(coor) == 0){
-                        //miss or outof bounds return to firemode 1
-                        fireMode = 1;
-                        while(!validShot(coor)) {
-                            coor.setAcross(random.nextInt(10 - 1 + 1) + 1);
-                            coor.setDown(random.nextInt(10 - 1 + 1) + 1);
-                        }
-                        return coor;
-                    }
-                    else if(directionScan(coor) == 2){
-                        //fire on empty space stay in firemode 3
-                        return coor;
+                    else {
+                        System.out.println("Line Firing: reached a miss or out of bounds and have already flipped. Firing randomly.");
+                        fireMode = RANDOM_FIRING;
+                        return randFire(coor);
                     }
                 }
             }
+            else {
+                //if reached the end of a ship try flipping direction and firing on the other side
+                System.out.println("Line Firing: invalid fire location and not a hit: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
+                if(!hasFlipped){
+                    System.out.println("Will scan in other direction.");
+                    return flip(coor);
+                }
+                else {
+                    System.out.println("Have already flipped. Firing randomly.");
+                    fireMode = RANDOM_FIRING;
+                    return randFire(coor);
+                }
+            }
         }
+        else if(fireMode == LINE_FIRING_2) {
+            System.out.println("Line Firing 2");
+            flip(lineTarget);
+        }
+        System.out.println("Firing at: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
+        return coor;
+    }
+
+    public Coordinate flip(Coordinate coor) {
+        System.out.println("Flip: Previous: " + currentDirection + ". New: " + (currentDirection + 2) % 4);
+        hasFlipped = true;
+        int numDirections = 4;
+        currentDirection = (currentDirection + 2) % 4;
+        coor = directionShot(currentDirection, coor);
+        while(directionScan(coor) == KEEP_SCANNING) {
+            System.out.println("Scanning past a hit: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
+            coor = directionShot(currentDirection, coor);
+        }
+        if(directionScan(coor) == CANT_FIRE) {
+            //miss or out of bounds return to random firing
+            System.out.println("Flip: Can't fire here because miss or OOB: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
+            fireMode = RANDOM_FIRING;
+            coor = randFire(coor);
+        }
+        else {
+            //fire on empty space and stay in line-firing mode
+            System.out.println("Flip: Firing on empty space and continuing Line Firing Mode.");
+            fireMode = LINE_FIRING;
+            lineTarget = coor;
+        }
+        System.out.println("Firing at: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
+        return coor;
+    }
+
+    public Coordinate randFire(Coordinate coor) {
+        while(!validShot(coor)) {
+            System.out.println("Randfire: current shot invalid: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
+            coor.setAcross(random.nextInt(10) + 1);
+            coor.setDown(random.nextInt(10) + 1);
+        }
+        if(playerShotHit(coor)) {
+            System.out.println("Randfire: entering Adjacent Firing Mode because shot hit.");
+            fireMode = ADJACENT_FIRING;
+            direction = UP;
+            adjacentTarget = coor;
+        }
+        System.out.println("Firing at: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
         return coor;
     }
 
     int directionScan(Coordinate coor){
-       if(playerMisses.contains(coor) || !WithinBounds(coor)) {
-           return 0;
-       }else if(playerHits.contains(coor)){
-           return 1;
-       }else{
-           return 2;
-       }
+        System.out.println("Scanning coordinate: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
+        if(playerMissesHas(coor) || !WithinBounds(coor)) {
+            System.out.println("Returning CANT_FIRE");
+            return CANT_FIRE;
+        }
+        else if(playerHitsHas(coor)) {
+            System.out.println("Returning KEEP_SCANNING");
+            return KEEP_SCANNING;
+        }
+        else {
+            System.out.println("Returning CAN_FIRE");
+            return CAN_FIRE;
+        }
+    }
+
+    public boolean playerHitsHas(Coordinate coor) {
+        for (int i = 0; i < playerHits.size(); i++) {
+            if((playerHits.get(i).getAcross() == coor.getAcross()) && (playerHits.get(i).getDown() == coor.getDown())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean playerMissesHas(Coordinate coor) {
+        for (int i = 0; i < playerHits.size(); i++) {
+            if((playerMisses.get(i).getAcross() == coor.getAcross()) && (playerMisses.get(i).getDown() == coor.getDown())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void shootAtPlayer() {
-       int randRow = 0;
-       int randCol = 0;
-       Coordinate coor = new Coordinate(randRow,randCol);
+        int randRow = 0;
+        int randCol = 0;
+        Coordinate coor = new Coordinate(randRow,randCol);
 
         if(hardMode == true) {
             coor = hardModeShot(coor);
-       }
-       else {
+        }
+        else {
            int max = 10;
            int min = 1;
            Random random = new Random();
            randRow = random.nextInt(max - min + 1) + min;
            randCol = random.nextInt(max - min + 1) + min;
            coor = new Coordinate(randRow, randCol);
-       }
-        lastComputerShot = coor;
+        }
         playerShot(coor);
     }
 
     void playerShot(Coordinate coor) {
-        if(playerMisses.contains(coor)) {
+        if(playerMissesHas(coor)) {
             System.out.println("Duplicate fire.");
         }
 
         if(aircraftCarrier.covers(coor) && aircraftCarrier.sunk == false) {
             aircraftCarrier.TakeDamage();
+            System.out.println(coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " added to hits list.");
             playerHits.add(coor);
         }
         else if (battleship.covers(coor) && battleship.sunk == false) {
             battleship.TakeDamage();
+            System.out.println(coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " added to hits list.");
             playerHits.add(coor);
         }
         else if (submarine.covers(coor) && submarine.sunk == false) {
             submarine.TakeDamage();
+            System.out.println(coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " added to hits list.");
             playerHits.add(coor);
         }
         else if (clipper.covers(coor) && clipper.sunk == false) {
-                    clipper.TakeDamage();
-                    clipper.sunk = true;
-                    playerHits.add(coor);
+            clipper.TakeDamage();
+            System.out.println(coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " added to hits list.");
+            clipper.sunk = true;
+            playerHits.add(coor);
         }
         else if (dinghy.covers(coor) && dinghy.sunk == false) {
+            System.out.println(coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " added to hits list.");
             dinghy.TakeDamage();
             dinghy.sunk = true;
             playerHits.add(coor);
         }
         else {
+            System.out.println(coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " added to misses list.");
             playerMisses.add(coor);
         }
     }
 
-     boolean playerShotHit(Coordinate coor) {
+    boolean playerShotHit(Coordinate coor) {
         boolean validHit = false;
-        if(playerMisses.contains(coor)) {
+        if(playerMissesHas(coor)) {
             System.out.println("Duplicate fire.");
         }
 
@@ -450,30 +572,25 @@ public class BattleshipModel {
     }
 
     boolean playerShotSunk(Coordinate coor) {
-        boolean validHit = false;
-        if(playerMisses.contains(coor)) {
+        if(playerMissesHas(coor)) {
             System.out.println("Duplicate fire.");
         }
-
-        if(aircraftCarrier.covers(coor) && aircraftCarrier.sunk == true) {
-            validHit = true;
+        if(aircraftCarrier.covers(coor) && aircraftCarrier.health == 1) {
+            return true;
         }
-        else if (battleship.covers(coor) && battleship.sunk == true) {
-            validHit = true;
+        if (battleship.covers(coor) && battleship.health == 1) {
+            return true;
         }
-        else if (submarine.covers(coor) && submarine.sunk == true) {
-            validHit = true;
+        if (submarine.covers(coor) && submarine.health == 1) {
+            return true;
         }
-        else if (clipper.covers(coor) && clipper.sunk == true) {
-            validHit = true;
+        if (clipper.covers(coor)) {
+            return true;
         }
-        else if (dinghy.covers(coor) && dinghy.sunk == true) {
-            validHit = true;
+        if (dinghy.covers(coor)) {
+            return true;
         }
-        else {
-            validHit = false;
-        }
-        return validHit;
+        return false;
     }
 
     public void scan(int rowInt, int colInt) {
@@ -498,8 +615,6 @@ public class BattleshipModel {
             scanResult = false;
         }
     }
-
-
 
     public int getPlayerHits() {
         return playerHits.size();
