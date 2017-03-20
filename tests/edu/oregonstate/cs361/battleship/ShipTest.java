@@ -13,12 +13,12 @@ class ShipTest {
     public void testPlaceShip() {
         MilitaryShip s = new MilitaryShip("AircraftCarrier",5, new Coordinate(0,0),new Coordinate(0,0), false);
 
-        assertEquals(true,s.covers(new Coordinate(5,2)));
+        assertEquals(false,s.covers(new Coordinate(5,2)));
     }
 
     @Test
     public void testPlaceShipHorizontal() {
-        MilitaryShip s = new MilitaryShip("AircraftCarrier",5, new Coordinate(0,0),new Coordinate(0,0), false);
+        MilitaryShip s = new MilitaryShip("AircraftCarrier",5, new Coordinate(6,2),new Coordinate(6,6), false);
 
         assertEquals(true,s.covers(new Coordinate(6,2)));
     }
@@ -47,7 +47,7 @@ class ShipTest {
 
     @Test
     public void testScan() {
-        MilitaryShip s = new MilitaryShip("AircraftCarrier",5, new Coordinate(0,0),new Coordinate(0,0), false);
+        MilitaryShip s = new MilitaryShip("AircraftCarrier",5, new Coordinate(5,2),new Coordinate(5,6), false);
 
         assertEquals(false,s.scan(new Coordinate(1,1)));
         assertEquals(true,s.scan(new Coordinate(4,2)));
