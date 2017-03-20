@@ -22,6 +22,7 @@ public class BattleshipModel {
     public ArrayList<Coordinate> computerMisses;
     public Coordinate lineTarget;
     public Coordinate adjacentTarget;
+    public Coordinate scanTarget;
 
     public static final int RANDOM_FIRING = 1;
     public static final int ADJACENT_FIRING = 2;
@@ -42,7 +43,7 @@ public class BattleshipModel {
     boolean hasFlipped = false;
     int fireMode = RANDOM_FIRING;
     int direction = UP;
-    int lineDirection = UP;
+    int currentDirection = UP;
 
     public BattleshipModel() {
         playerHits = new ArrayList<>();
@@ -89,7 +90,7 @@ public class BattleshipModel {
         }
     }
 
-    public boolean coversComputerShips(Coordinate coorStart, Coordinate coorEnd){
+    public boolean CoversComputerShips(Coordinate coorStart, Coordinate coorEnd){
         Coordinate coor;
         int Shiplength;
         char Orientation;
@@ -120,7 +121,7 @@ public class BattleshipModel {
         return false;
     }
 
-    public boolean withinBounds(Coordinate coor){
+    public boolean WithinBounds(Coordinate coor){
         int max = 10;
         int min = 1;
 
@@ -153,7 +154,7 @@ public class BattleshipModel {
             if(randOren == 1){
                 coorS = new Coordinate(randRow,randCol);
                 coorE = new Coordinate(randRow + shipLength,randCol);
-                if(!coversComputerShips(coorS,coorE) && withinBounds(coorE)){
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
                     ship.setLocation(coorS,coorE);
                     break;
                 }
@@ -161,7 +162,7 @@ public class BattleshipModel {
             else{
                 coorS = new Coordinate(randRow,randCol);
                 coorE = new Coordinate(randRow ,randCol + shipLength);
-                if(!coversComputerShips(coorS,coorE) && withinBounds(coorE)){
+                if(!CoversComputerShips(coorS,coorE) && WithinBounds(coorE)){
                     ship.setLocation(coorS,coorE);
                     break;
                 }
@@ -236,7 +237,7 @@ public class BattleshipModel {
             int CoorStartRow = computer_clipper.start.getAcross();
             int CoorStartCol = computer_clipper.start.getDown();
 
-            if(computer_clipper.axisPositioning() == 'V') {
+            if(computer_clipper.AxisPositioning() == 'V') {
                 for (int i = 0; i < 3; i++) {
                     Coordinate CivShipCoor = new Coordinate(CoorStartRow, CoorStartCol + i);
                     computerHits.add(CivShipCoor);
@@ -259,7 +260,7 @@ public class BattleshipModel {
     }
 
      public boolean validShot(Coordinate coor) {
-        if(withinBounds(coor) == false) {
+        if(WithinBounds(coor) == false) {
             return false;
         }
         else if(playerHitsHas(coor)== true) {
@@ -325,7 +326,7 @@ public class BattleshipModel {
                 //if shot is a hit go to line firing mode
                 fireMode = LINE_FIRING;
                 System.out.println("Adjacent Firing: Hit. Now entering Line Firing mode.");
-                lineDirection = direction - 1;
+                currentDirection = direction - 1;
                 lineTarget = coor;
                 hasFlipped = false;
             }
@@ -340,8 +341,8 @@ public class BattleshipModel {
         }
         else if(fireMode == LINE_FIRING) {
             //fire in one direction
-            coor = directionShot(lineDirection, lineTarget);
-            System.out.println("Line Firing: current direction: " + lineDirection);
+            coor = directionShot(currentDirection, lineTarget);
+            System.out.println("Line Firing: current direction: " + currentDirection);
             if(validShot(coor)) {
                 if(playerShotSunk(coor)) {
                     fireMode = RANDOM_FIRING;
@@ -367,7 +368,7 @@ public class BattleshipModel {
             else if(playerHitsHas(coor)) {
                 System.out.println("Line Firing: invalid fire location: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64) + " is a hit");
                 while(playerHitsHas(coor)) {
-                    coor = directionShot(lineDirection, coor);
+                    coor = directionShot(currentDirection, coor);
                     System.out.println("Line Firing: Scanning past a hit. New fire location: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
                 }
                 if(validShot(coor)) {
@@ -411,14 +412,14 @@ public class BattleshipModel {
     }
 
     public Coordinate flip(Coordinate coor) {
-        System.out.println("Flip: Previous: " + lineDirection + ". New: " + (lineDirection + 2) % 4);
+        System.out.println("Flip: Previous: " + currentDirection + ". New: " + (currentDirection + 2) % 4);
         hasFlipped = true;
         int numDirections = 4;
-        lineDirection = (lineDirection + 2) % 4;
-        coor = directionShot(lineDirection, coor);
+        currentDirection = (currentDirection + 2) % 4;
+        coor = directionShot(currentDirection, coor);
         while(directionScan(coor) == KEEP_SCANNING) {
             System.out.println("Scanning past a hit: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
-            coor = directionShot(lineDirection, coor);
+            coor = directionShot(currentDirection, coor);
         }
         if(directionScan(coor) == CANT_FIRE) {
             //miss or out of bounds return to random firing
@@ -458,7 +459,7 @@ public class BattleshipModel {
 
     int directionScan(Coordinate coor){
         System.out.println("Scanning coordinate: " + coor.getDown() + ", " + (char)(coor.getAcross() + 64));
-        if(playerMissesHas(coor) || !withinBounds(coor)) {
+        if(playerMissesHas(coor) || !WithinBounds(coor)) {
             System.out.println("Returning CANT_FIRE");
             return CANT_FIRE;
         }
