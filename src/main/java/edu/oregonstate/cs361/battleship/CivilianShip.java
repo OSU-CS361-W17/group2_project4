@@ -14,16 +14,6 @@ public class CivilianShip extends Ship{
         health = 1;
     }
 
-    public char AxisPositioning()
-    {
-        if(start.getDown() == end.getDown()){
-            return 'H';
-        }
-        else {
-            return 'V';
-        }
-    }
-
     public boolean scan(Coordinate coor) {
         if(covers(coor)){
             return true;
