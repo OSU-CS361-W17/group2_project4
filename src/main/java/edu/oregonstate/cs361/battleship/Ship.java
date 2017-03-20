@@ -10,7 +10,16 @@ public class Ship {
     protected Coordinate end;
     protected boolean sunk;
     protected int health;
-    protected boolean placed;
+
+    public char axisPositioning()
+    {
+        if(start.getDown() == end.getDown()){
+            return 'H';
+        }
+        else {
+            return 'V';
+        }
+    }
 
     public void setLocation(Coordinate s, Coordinate e) {
         start = s;

@@ -16,16 +16,6 @@ public class MilitaryShip extends Ship {
         stealth = st;
     }
 
-    public char AxisPositioning()
-    {
-        if(start.getDown() == end.getDown()){
-            return 'H';
-        }
-        else {
-            return 'V';
-        }
-    }
-
     public boolean scan(Coordinate coor) {
         if(stealth) {
             return false;

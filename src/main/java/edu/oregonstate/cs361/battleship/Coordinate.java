@@ -4,27 +4,27 @@ package edu.oregonstate.cs361.battleship;
  * Created by michaelhilton on 1/8/17.
  */
 public class Coordinate {
-    private int Across;
-    private int Down;
+    private int across;
+    private int down;
 
     public Coordinate(int letter, int number) {
-        Across = letter;
-        Down = number;
+        across = letter;
+        down = number;
     }
 
     public int getDown() {
-        return Down;
+        return down;
     }
 
     public void setDown(int down) {
-        Down = down;
+        this.down = down;
     }
 
     public int getAcross() {
-        return Across;
+        return across;
     }
 
     public void setAcross(int across) {
-        Across = across;
+        this.across = across;
     }
 }
