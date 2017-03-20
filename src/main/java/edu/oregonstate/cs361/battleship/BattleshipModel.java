@@ -22,7 +22,6 @@ public class BattleshipModel {
     public ArrayList<Coordinate> computerMisses;
     public Coordinate lineTarget;
     public Coordinate adjacentTarget;
-    public Coordinate scanTarget;
 
     public static final int RANDOM_FIRING = 1;
     public static final int ADJACENT_FIRING = 2;
@@ -259,14 +258,14 @@ public class BattleshipModel {
         }
     }
 
-     public boolean validShot(Coordinate coor) {
-        if(WithinBounds(coor) == false) {
+    public boolean validShot(Coordinate coor) {
+        if(!WithinBounds(coor)) {
             return false;
         }
-        else if(playerHitsHas(coor)== true) {
+        else if(playerHitsHas(coor)) {
             return false;
         }
-        else if(playerMissesHas(coor) == true) {
+        else if(playerMissesHas(coor)) {
             return false;
         }
         else {
