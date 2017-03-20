@@ -378,6 +378,7 @@ public class BattleshipModel {
            Random random = new Random();
            randRow = random.nextInt(max - min + 1) + min;
            randCol = random.nextInt(max - min + 1) + min;
+           coor = new Coordinate(randRow, randCol);
        }
         lastComputerShot = coor;
         playerShot(coor);
